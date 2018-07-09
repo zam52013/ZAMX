@@ -55,7 +55,7 @@ typedef enum
 #define KEY_SHORT_TIME 90
 #define KEY_LONG_TIME 398
 
-void Key_Init();
+void Key_Init(void);
 unsigned char Key_Scan(void);
 
 

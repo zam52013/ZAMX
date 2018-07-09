@@ -67,6 +67,7 @@ int main(void)
 {
 	SystemInit(); 
 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);//
+	cycleCounterInit();
 	SysTick_Config(SystemCoreClock / 1000);		//	1ms base time
 	SOUNCE_Init();
 /***************USB***********************/
@@ -101,13 +102,13 @@ int main(void)
 void start_task(void *pdata)
 {
 	OS_CPU_SR cpu_sr = 0;
-    	pdata = pdata;
-    	OS_ENTER_CRITICAL();            //进入临界区(无法被中断打断)
+  pdata = pdata;
+  OS_ENTER_CRITICAL();            //进入临界区(无法被中断打断)
 
 	OSTaskCreate(led_task, (void *)0, (OS_STK*)&LED_TASK_STK[LED_STK_SIZE - 1], LED_TASK_PRIO);
 
 	OSTaskSuspend(START_TASK_PRIO); //挂起起始任务.
-    	OS_EXIT_CRITICAL();             //退出临界区(可以被中断打断)
+  OS_EXIT_CRITICAL();             //退出临界区(可以被中断打断)
 }
     
 void led_task(void *pdata)
@@ -119,3 +120,21 @@ void led_task(void *pdata)
 		printf("get_time=%d\r\n",OSTimeGet());
 	}
 }
+
+	/**
+  * @
+  */ 
+
+/**
+  * @
+  */
+
+/**
+  * @
+  */ 
+
+/**
+  * @
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/

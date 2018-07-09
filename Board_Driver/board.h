@@ -178,9 +178,53 @@ static GPIO_Driver POW_Gpio=
 };
 static GPIO_Driver* POW_GPIO=&POW_Gpio;
 
-/***SOUCE***/
+/***SOUCE init***/
 static USART_Driver* SOUCE_PER=&Seril_A;
+
+/***SIM7600 init***/
+static USART_Driver* SIM7600_PER=&Seril_A;
+#define SIM7600_IRTHandler USART1_IRQHandler
+#define GSM_USART USART1
+
+static GPIO_Driver SIM7600_POW_Gpio=
+{
+	.GPIO_X=GPIOF,
+	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
+	.GPIO_Init_Def=
+	{
+		.GPIO_Pin=GPIO_Pin_12,
+		.GPIO_Mode=GPIO_Mode_OUT,
+		.GPIO_Speed=GPIO_Speed_100MHz,
+		.GPIO_OType=GPIO_OType_PP,
+		.GPIO_PuPd=GPIO_PuPd_NOPULL
+	},
+	.GPIO_Func=RCC_AHB1Periph_GPIOF
+};
+static GPIO_Driver* SIM7600_POW_GPIO=&SIM7600_POW_Gpio;
+
+static GPIO_Driver SIM7600_FLIGHT_Gpio=
+{
+	.GPIO_X=GPIOF,
+	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
+	.GPIO_Init_Def=
+	{
+		.GPIO_Pin=GPIO_Pin_12,
+		.GPIO_Mode=GPIO_Mode_OUT,
+		.GPIO_Speed=GPIO_Speed_100MHz,
+		.GPIO_OType=GPIO_OType_PP,
+		.GPIO_PuPd=GPIO_PuPd_NOPULL
+	},
+	.GPIO_Func=RCC_AHB1Periph_GPIOF
+};
+static GPIO_Driver* SIM7600_FLIGHT_GPIO=&SIM7600_FLIGHT_Gpio;
+
+
+/***RTK init***/
+static USART_Driver* RTK_DAT=&Seril_A;
+static USART_Driver* RTK_RTCM=&Seril_A;
+
 /************************************************************************************************/
+
 
 #ifdef __cplusplus
 }
@@ -188,5 +232,22 @@ static USART_Driver* SOUCE_PER=&Seril_A;
  
  #endif
  
+ /**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/
  
  

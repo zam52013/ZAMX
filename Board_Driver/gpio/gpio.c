@@ -74,3 +74,20 @@ uint8_t GPIOx_Read_Out(GPIO_Driver* GPIOx)
 	return GPIO_ReadOutputDataBit(GPIOx->GPIO_X,GPIOx->GPIO_Init_Def.GPIO_Pin);
 }
  
+	/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/

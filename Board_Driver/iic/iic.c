@@ -89,5 +89,21 @@ void IICx_Init(IIC_Driver* IICx)
 	
 }
 
+	/**
+  * @}
+  */ 
 
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/
  

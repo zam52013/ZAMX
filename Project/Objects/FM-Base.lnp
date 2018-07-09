@@ -77,6 +77,13 @@
 ".\objects\mpu9250.o"
 ".\objects\pow_ctr.o"
 ".\objects\souce.o"
+".\objects\sim7600.o"
+".\objects\rtk_base.o"
+"..\Src\lib\RTCM\rtcm.lib"
+".\objects\fm_qx.o"
+".\objects\socket.o"
+".\objects\rotation.o"
+".\objects\lowpassfilter2p.o"
 ".\objects\main.o"
 --strict --scatter ".\Objects\FM-Base.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

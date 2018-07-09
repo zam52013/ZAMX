@@ -314,5 +314,21 @@ void stm32_spi5select(SPIx_Cs* spi_cs,uint32_t devid, CS_SEL selected);
  #endif
  
  
- 
+ 	/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/
  

@@ -575,11 +575,28 @@ static int8_t g_usart7rxfifo[CONFIG_UART7_DMA_RXBUFSIZE];
   void UARTx_Init(USART_Driver* USARTx);
   void USARTx_DeInit(USART_Driver* USARTx);
   void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint8_t length);
+  void UART_SendString(USART_TypeDef* USARTx,char* s);
  #endif
  
  
  
- 
+	/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/ 
  
  
  

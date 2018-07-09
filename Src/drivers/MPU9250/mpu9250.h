@@ -173,7 +173,7 @@
 	int16_t gyro_z;
 };
 	
-	void MPU9250_Init();
+	void MPU9250_Init(void);
  void Get_Raw_Date(void);
 
 
@@ -183,7 +183,23 @@
  
  #endif
  
- 
+	/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/ 
  
  
  

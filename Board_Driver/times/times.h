@@ -56,7 +56,9 @@
  #define COUNT_0_5HZ     2000      // Number of 1000 Hz frames for   1 Hz Loop 
  
  
- 
+ #define DWT_CTRL    (*(volatile uint32_t *)0xE0001000)
+ #define DWT_CYCCNT  ((volatile uint32_t *)0xE0001004)
+ #define CYCCNTENA   (1 << 0)
  
  typedef union 
  {  
@@ -78,13 +80,32 @@
  
  extern time_flag TIME_FLAG; 
  
- 
+ void cycleCounterInit(void);
+ uint32_t micros(void);
+ uint32_t millis(void);
+ void Delay_us(uint32_t us);
  void Delay_ms(u32 num); 
 
  #endif
  
  
- 
+ 	/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/
  
  
  

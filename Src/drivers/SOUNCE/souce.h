@@ -58,7 +58,7 @@
 			uint8_t strinbuff[100];
 	 };
 	 
-	 void SOUNCE_Init();
+	 void SOUNCE_Init(void);
 	 void Sounce_Composition(const char *str,uint8_t cmd);
 	 
 	 	 	#ifdef __cplusplus
@@ -68,3 +68,21 @@
 	
  #endif
  
+	
+	/**
+  * @
+  */ 
+
+/**
+  * @
+  */
+
+/**
+  * @
+  */ 
+
+/**
+  * @
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/

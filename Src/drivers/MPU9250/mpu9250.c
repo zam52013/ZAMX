@@ -75,5 +75,21 @@ unsigned char Mpu9250_Write_Reg(unsigned char reg,unsigned char value)
 	}
 }
 
+	/**
+  * @}
+  */ 
 
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/
  

@@ -50,6 +50,11 @@
 #endif
 
 #endif
+
+static uint32_t sysTickUptime = 0;
+static volatile uint32_t sysTickCycleCounter = 0;
+static volatile uint32_t usTicks = 0;
+
 static u32 fac_ms=0;//ms 
  
 unsigned char Time_statr_flag=0;	
@@ -91,7 +96,7 @@ void delay_ostimedly(u32 ticks)
 /*-------------------------------------- 
 
  ;-------------------------------------*/ 
- static void time_tick() 
+ static void times_tick() 
  { 
  	static unsigned int Time_tic_cnt=0; 
  	if(Time_statr_flag) 
@@ -151,10 +156,59 @@ static void times_Flag()
  		TIME_FLAG.time_sub.flag_0_5hz=TRUE; 
  	} 
  } 
+
+uint32_t micros(void)
+{    
+	register uint32_t oldCycle, cycle, timeMs;   
+	do    
+	{        
+		timeMs = __LDREXW(&sysTickUptime);        
+		cycle = *DWT_CYCCNT;        
+		oldCycle = sysTickCycleCounter;    
+	}    
+	while(__STREXW(timeMs, &sysTickUptime));    
+	return (timeMs * 1000) + (cycle - oldCycle) / usTicks;
+}
+uint32_t millis(void)
+{    
+	return sysTickUptime;
+}
+
+void cycleCounterInit(void)
+{    
+	RCC_ClocksTypeDef clocks;    
+	RCC_GetClocksFreq(&clocks);    
+	usTicks = clocks.SYSCLK_Frequency / 1000000;    // enable DWT access    
+	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;    // enable the CPU cycle counter    
+	DWT_CTRL |= CYCCNTENA;
+}
+
+void Delay_us(uint32_t us)
+{    
+	uint32_t elapsed = 0;    
+	uint32_t lastCount = *DWT_CYCCNT;    
+	for(;;)    
+	{        
+		register uint32_t current_count = *DWT_CYCCNT;        
+		uint32_t elapsed_us;        // measure the time elapsed since the last time we checked        
+		elapsed += current_count - lastCount;       
+		lastCount = current_count;        // convert to microseconds        
+		elapsed_us = elapsed / usTicks;        
+		if(elapsed_us >= us)            
+			break;        // reduce the delay by the elapsed time        
+		us -= elapsed_us;        // keep fractional microseconds for the next iteration        
+		elapsed %= usTicks;    
+	}
+}///////////////////////////////////////////////////////////////////////////////// Delay Milliseconds///////////////////////////////////////////////////////////////////////////////
+void Delay_ms(uint32_t ms)
+{    
+	while(ms--)        
+		Delay_us(1000);
+}
 void SysTick_Handler(void) 
  {				    
  	fac_ms--; 
- 	time_tick(); 
+ 	times_tick(); 
  	times_Flag();
 	if(delay_osrunning==1)					//OS开始跑了,才执行正常的调度处理
 	{
@@ -163,3 +217,22 @@ void SysTick_Handler(void)
 		OSIntExit();       	 				//触发任务切换软中断
 	}	 
  } 
+
+ 
+ 	/**
+  * @
+  */ 
+
+/**
+  * @
+  */
+
+/**
+  * @
+  */ 
+
+/**
+  * @
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/

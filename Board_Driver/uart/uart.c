@@ -67,8 +67,9 @@
  {
 	GPIO_InitTypeDef GPIO_InitStructure; 
  	USART_InitTypeDef USART_InitStructure; 
+	 #ifdef USARTx_USE_DMA
 	DMA_InitTypeDef DMA_InitStructure;
-	
+	#endif
 	USARTx->USART_CLK(USARTx->USART_Func, ENABLE);
 	USARTx->TX_GPIOClk(USARTx->TX_GPIOFunc, ENABLE);
 	USARTx->RX_GPIOClk(USARTx->RX_GPIOFunc, ENABLE);
@@ -179,9 +180,34 @@ void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint8_t length)
 	}
 }
 
+void UART_SendString(USART_TypeDef* USARTx,char* s)
+{
+	while(*s)//¼ì²â×Ö·û´®½áÊø·û
+	{
+		while(USART_GetFlagStatus(USARTx, USART_FLAG_TC)==RESET); 
+		USART_SendData(USARTx ,*s);//·¢ËÍµ±Ç°×Ö·û
+		s++;
+	}
+}
+
 	
-	
-	
+	/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */ 
+
+/************************ (C) COPYRIGHT feima *****END OF FILE****/	
 	
 	
 	

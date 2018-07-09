@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx,USE_USB_OTG_FS,SYSTEM_SUPPORT_OS,__FPU_PRESENT=1,__FPU_USED =1</Define>
               <Undefine></Undefine>
-              <IncludePath>..\StdPeriph_Driver_Lib\CMSIS\Include;..\StdPeriph_Driver_Lib\CMSIS\Sys;..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc;..\Main;..\Board_Driver\gpio;..\Board_Driver\iic;..\Board_Driver\spi;..\Board_Driver\times;..\Board_Driver\uart;..\Board_Driver\usb;..\Board_Driver;..\StdPeriph_Driver_Lib\STM32_USB_APP\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc;..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc;..\Src\drivers\FRAM;..\Src\drivers\KEY;..\Src\drivers\MPU9250;..\Src\drivers\LED;..\Src\drivers\POW_CTR;..\Src\drivers\SOUNCE;..\Planforms\UCOSII\CONFIG;..\Planforms\UCOSII\CORE;..\Planforms\UCOSII\PORT</IncludePath>
+              <IncludePath>..\StdPeriph_Driver_Lib\CMSIS\Include;..\StdPeriph_Driver_Lib\CMSIS\Sys;..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc;..\Main;..\Board_Driver\gpio;..\Board_Driver\iic;..\Board_Driver\spi;..\Board_Driver\times;..\Board_Driver\uart;..\Board_Driver\usb;..\Board_Driver;..\StdPeriph_Driver_Lib\STM32_USB_APP\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc;..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc;..\Src\drivers\FRAM;..\Src\drivers\KEY;..\Src\drivers\MPU9250;..\Src\drivers\LED;..\Src\drivers\POW_CTR;..\Src\drivers\SOUNCE;..\Planforms\UCOSII\CONFIG;..\Planforms\UCOSII\CORE;..\Planforms\UCOSII\PORT;..\Src\lib\RTCM;..\Src\lib\Conversion;..\Src\lib;..\Src\lib\LowPassFilter2p;..\Src\drivers\RTK_BASE</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -797,7 +797,79 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Src</GroupName>
+          <GroupName>Src\drivers</GroupName>
+          <Files>
+            <File>
+              <FileName>fm25v.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\FRAM\fm25v.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\KEY\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\LED\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpu9250.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\MPU9250\mpu9250.c</FilePath>
+            </File>
+            <File>
+              <FileName>pow_ctr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\POW_CTR\pow_ctr.c</FilePath>
+            </File>
+            <File>
+              <FileName>souce.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\SOUNCE\souce.c</FilePath>
+            </File>
+            <File>
+              <FileName>sim7600.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\SIM7600\sim7600.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtk_base.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\RTK_BASE\rtk_base.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Src\lib</GroupName>
+          <Files>
+            <File>
+              <FileName>rtcm.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\Src\lib\RTCM\rtcm.lib</FilePath>
+            </File>
+            <File>
+              <FileName>fm_qx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lib\RTCM\fm_qx.c</FilePath>
+            </File>
+            <File>
+              <FileName>socket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lib\RTCM\socket.c</FilePath>
+            </File>
+            <File>
+              <FileName>rotation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lib\Conversion\rotation.c</FilePath>
+            </File>
+            <File>
+              <FileName>lowpassfilter2p.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lib\LowPassFilter2p\lowpassfilter2p.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Main</GroupName>
