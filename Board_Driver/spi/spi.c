@@ -54,20 +54,21 @@
 
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
 	GPIO_InitStructure.GPIO_Pin = SPIx->SCK_Pin | SPIx->MISO_Pin | SPIx->MOSI_Pin;
 	GPIO_Init(SPIx->Gpio, &GPIO_InitStructure);
+	
 
 	//SPI configuration -------------------------------------------------------*/
-	SPI_I2S_DeInit(SPIx->SPI);
+	//SPI_I2S_DeInit(SPIx->SPI);
 	SPI_Init(SPIx->SPI, &SPIx->SPI_Init_Def);
 
-	SPI_CalculateCRC(SPIx->SPI, DISABLE);
+	//SPI_CalculateCRC(SPIx->SPI, DISABLE);
 
 	SPI_Cmd(SPIx->SPI, ENABLE);
-	while (SPI_I2S_GetFlagStatus(SPIx->SPI, SPI_I2S_FLAG_TXE) == RESET);
-	SPI_I2S_ReceiveData(SPIx->SPI);
+	//while (SPI_I2S_GetFlagStatus(SPIx->SPI, SPI_I2S_FLAG_TXE) == RESET);
+	//SPI_I2S_ReceiveData(SPIx->SPI);
 	
 	#ifdef SPIx_USE_DMA
 	/*
@@ -130,9 +131,10 @@
 
 	spi_cs->GPIO_CS_CLK(spi_cs->CS_Func, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = spi_cs->CS_Pin;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(spi_cs->GPIO_PORT_CS, &GPIO_InitStructure);
 	GPIO_SetBits(spi_cs->GPIO_PORT_CS, spi_cs->CS_Pin);
 }
@@ -167,11 +169,11 @@ void stm32_spi1select(SPIx_Cs* spi_cs,uint32_t devid, CS_SEL selected)
 		switch(devid)
 		{
 			case FM25V_ID:
-					if(CS_ON)
+					if(selected==CS_ON)
 					{
 						GPIO_ResetBits(spi_cs->GPIO_PORT_CS,spi_cs->CS_Pin);
 					}
-					else
+					else if(selected==CS_OFF)
 					{
 						GPIO_SetBits(spi_cs->GPIO_PORT_CS,spi_cs->CS_Pin);
 					}
@@ -187,11 +189,11 @@ void stm32_spi3select(SPIx_Cs* spi_cs,uint32_t devid, CS_SEL selected)
 	switch(devid)
 		{
 			case MPU9250_ID:
-					if(CS_ON)
+					if(selected==CS_ON)
 					{
 						GPIO_ResetBits(spi_cs->GPIO_PORT_CS,spi_cs->CS_Pin);
 					}
-					else
+					else if(selected==CS_OFF)
 					{
 						GPIO_SetBits(spi_cs->GPIO_PORT_CS,spi_cs->CS_Pin);
 					}

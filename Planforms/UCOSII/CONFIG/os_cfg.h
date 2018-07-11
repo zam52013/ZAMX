@@ -48,7 +48,7 @@
 #define OS_SCHED_LOCK_EN          1u   /* Include code for OSSchedLock() and OSSchedUnlock()           */
 
 #define OS_TICK_STEP_EN           1u   /* Enable tick stepping feature for uC/OS-View                  */
-#define OS_TICKS_PER_SEC       	200u   /* Set the number of ticks in one second                        */
+#define OS_TICKS_PER_SEC       	1000u   /* Set the number of ticks in one second  default=2                       */
 
 
                                        /* --------------------- TASK STACK SIZE ---------------------- */

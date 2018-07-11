@@ -34,5 +34,7 @@
 .\objects\gpio.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h
 .\objects\gpio.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 .\objects\gpio.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
-.\objects\gpio.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
+.\objects\gpio.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma2d.h
+.\objects\gpio.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fmc.h
+.\objects\gpio.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sai.h
 .\objects\gpio.o: ..\Board_Driver\board_defconfig.h

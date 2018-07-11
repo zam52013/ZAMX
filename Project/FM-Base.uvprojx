@@ -13,16 +13,16 @@
       <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F407ZGTx</Device>
+          <Device>STM32F427IIHx</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F4xx_DFP.2.13.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
-          <Cpu>IRAM(0x20000000,0x00020000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x00030000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00200000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000 -FP0($$Device:STM32F407ZGTx$CMSIS\Flash\STM32F4xx_1024.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_2048 -FS08000000 -FL0200000 -FP0($$Device:STM32F427IIHx$CMSIS\Flash\STM32F4xx_2048.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32F407ZGTx$Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32F427IIHx$Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -32,7 +32,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F407ZGTx$CMSIS\SVD\STM32F40x.svd</SFDFile>
+          <SFDFile>$$Device:STM32F427IIHx$CMSIS\SVD\STM32F427x.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -243,12 +243,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x30000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x100000</Size>
+                <Size>0x200000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -273,7 +273,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x100000</Size>
+                <Size>0x200000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -298,7 +298,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x30000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -333,9 +333,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx,USE_USB_OTG_FS,SYSTEM_SUPPORT_OS,__FPU_PRESENT=1,__FPU_USED =1</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F427X,USE_USB_OTG_FS,SYSTEM_SUPPORT_OS,__FPU_PRESENT=1,__FPU_USED =1</Define>
               <Undefine></Undefine>
-              <IncludePath>..\StdPeriph_Driver_Lib\CMSIS\Include;..\StdPeriph_Driver_Lib\CMSIS\Sys;..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc;..\Main;..\Board_Driver\gpio;..\Board_Driver\iic;..\Board_Driver\spi;..\Board_Driver\times;..\Board_Driver\uart;..\Board_Driver\usb;..\Board_Driver;..\StdPeriph_Driver_Lib\STM32_USB_APP\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc;..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc;..\Src\drivers\FRAM;..\Src\drivers\KEY;..\Src\drivers\MPU9250;..\Src\drivers\LED;..\Src\drivers\POW_CTR;..\Src\drivers\SOUNCE;..\Planforms\UCOSII\CONFIG;..\Planforms\UCOSII\CORE;..\Planforms\UCOSII\PORT;..\Src\lib\RTCM;..\Src\lib\Conversion;..\Src\lib;..\Src\lib\LowPassFilter2p;..\Src\drivers\RTK_BASE</IncludePath>
+              <IncludePath>..\StdPeriph_Driver_Lib\CMSIS\Include;..\StdPeriph_Driver_Lib\CMSIS\Sys;..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc;..\Main;..\Board_Driver\gpio;..\Board_Driver\iic;..\Board_Driver\spi;..\Board_Driver\times;..\Board_Driver\uart;..\Board_Driver\usb;..\Board_Driver;..\StdPeriph_Driver_Lib\STM32_USB_APP\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc;..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc;..\Src\drivers\FRAM;..\Src\drivers\KEY;..\Src\drivers\MPU9250;..\Src\drivers\LED;..\Src\drivers\POW_CTR;..\Src\drivers\SOUNCE;..\Planforms\UCOSII\CONFIG;..\Planforms\UCOSII\CORE;..\Planforms\UCOSII\PORT;..\Src\lib\RTCM;..\Src\lib\Conversion;..\Src\lib;..\Src\lib\LowPassFilter2p;..\Src\drivers\RTK_BASE;..\Src\lib\CRC</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -395,9 +395,9 @@
           <GroupName>StdPeriph_Driver_Lib\CMSIS\Core</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f40_41xxx.s</FileName>
+              <FileName>startup_stm32f427x.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\CMSIS\Core\arm\startup_stm32f40_41xxx.s</FilePath>
+              <FilePath>..\StdPeriph_Driver_Lib\CMSIS\Core\arm\startup_stm32f427x.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -839,6 +839,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\drivers\RTK_BASE\rtk_base.c</FilePath>
             </File>
+            <File>
+              <FileName>esp32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\drivers\Wifi\esp32.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -868,6 +873,11 @@
               <FileName>lowpassfilter2p.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\lib\LowPassFilter2p\lowpassfilter2p.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc24.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lib\CRC\crc24.c</FilePath>
             </File>
           </Files>
         </Group>

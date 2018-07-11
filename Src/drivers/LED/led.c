@@ -39,9 +39,13 @@
  void LED_Init()
  {
 		GPIOx_Init(POW_GPIO1);
+		GPIOx_Write(POW_GPIO1,ON);
 		GPIOx_Init(POW_GPIO2);
+		GPIOx_Write(POW_GPIO2,ON);
 		GPIOx_Init(STAT_GPIO1);
+		GPIOx_Write(STAT_GPIO1,ON);
 		GPIOx_Init(STAT_GPIO2);
+	  GPIOx_Write(STAT_GPIO2,ON);
  }
  
  void LED_Out(GPIO_Driver* GPIOx,GPIO_State fun_state)

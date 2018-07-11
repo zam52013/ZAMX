@@ -1,7 +1,7 @@
 --cpu=Cortex-M4.fp
 ".\objects\stm32f4xx_it.o"
 ".\objects\system_stm32f4xx.o"
-".\objects\startup_stm32f40_41xxx.o"
+".\objects\startup_stm32f427x.o"
 ".\objects\misc.o"
 ".\objects\stm32f4xx_adc.o"
 ".\objects\stm32f4xx_can.o"
@@ -79,11 +79,13 @@
 ".\objects\souce.o"
 ".\objects\sim7600.o"
 ".\objects\rtk_base.o"
+".\objects\esp32.o"
 "..\Src\lib\RTCM\rtcm.lib"
 ".\objects\fm_qx.o"
 ".\objects\socket.o"
 ".\objects\rotation.o"
 ".\objects\lowpassfilter2p.o"
+".\objects\crc24.o"
 ".\objects\main.o"
 --strict --scatter ".\Objects\FM-Base.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

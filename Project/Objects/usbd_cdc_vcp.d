@@ -34,7 +34,9 @@
 .\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h
 .\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 .\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
-.\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
+.\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma2d.h
+.\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fmc.h
+.\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sai.h
 .\objects\usbd_cdc_vcp.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\inc\usbd_cdc_core.h
 .\objects\usbd_cdc_vcp.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc\usbd_ioreq.h

@@ -36,6 +36,8 @@
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
-.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
+.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma2d.h
+.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fmc.h
+.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sai.h
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_regs.h
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_defines.h

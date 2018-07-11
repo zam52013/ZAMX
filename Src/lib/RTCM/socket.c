@@ -289,7 +289,9 @@ qxwz_soc qxwz_soc_init(void)
 void SIM7600_IRTHandler(void)                	
 {
 	uint8_t res = 0;
+	#ifdef SYSTEM_SUPPORT_OS
 	OSIntEnter();
+	#endif
 	if(USART_GetITStatus(GSM_USART, USART_IT_RXNE) != RESET) 
 	{
 		res = USART_ReceiveData(GSM_USART);
@@ -325,7 +327,9 @@ void SIM7600_IRTHandler(void)
 			query_uart_buf(res);
 		}
 	}
-	OSIntExit();  
+	#ifdef SYSTEM_SUPPORT_OS
+	OSIntExit();
+	#endif  
 }
  
  /*******************************************************************************
@@ -842,19 +846,19 @@ void async_notify(void)
 }
 
  /**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */
 
 /**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */ 
 
 /************************ (C) COPYRIGHT feima *****END OF FILE****/

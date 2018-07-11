@@ -38,6 +38,7 @@
  
  void Sim7600_Init(void)
  {
+		UARTx_Init(SIM7600_PER);
 		GPIOx_Init(SIM7600_POW_GPIO);
 	 GPIOx_Write(SIM7600_POW_GPIO,ON);
 		GPIOx_Init(SIM7600_FLIGHT_GPIO);

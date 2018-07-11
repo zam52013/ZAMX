@@ -35,7 +35,9 @@
 .\objects\souce.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h
 .\objects\souce.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 .\objects\souce.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
-.\objects\souce.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
+.\objects\souce.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma2d.h
+.\objects\souce.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fmc.h
+.\objects\souce.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sai.h
 .\objects\souce.o: ..\Board_Driver\iic\iic.h
 .\objects\souce.o: ..\Board_Driver\spi\spi.h
 .\objects\souce.o: ..\Board_Driver\board_defconfig.h

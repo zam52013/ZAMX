@@ -57,8 +57,8 @@ unsigned char Mpu9250_Write_Reg(unsigned char reg,unsigned char value)
 		SPIx_Init(MPU9250);
 		SPIx_Init_Cs(MPU9250_CS);
 	 
-		Mpu9250_Write_Reg(MPUREG_PWR_MGMT_1, 0x03);//pow config
-		Mpu9250_Write_Reg(MPUREG_PWR_MGMT_2, 0x00);//pow config
+	Mpu9250_Write_Reg(MPUREG_PWR_MGMT_1, 0x03);//pow config
+	Mpu9250_Write_Reg(MPUREG_PWR_MGMT_2, 0x00);//pow config
     Mpu9250_Write_Reg(MPUREG_SMPLRT_DIV, 0x00);//samp speed
     Mpu9250_Write_Reg(MPUREG_CONFIG, 0x02);
     Mpu9250_Write_Reg(MPUREG_GYRO_CONFIG, 0x08);//500

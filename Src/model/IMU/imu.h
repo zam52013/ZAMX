@@ -55,7 +55,7 @@
 #define        kfgn  (1.0-kfg)
 	 
 
-	 	#ifdef __cplusplus
+	#ifdef __cplusplus
 	}
 #endif
 	

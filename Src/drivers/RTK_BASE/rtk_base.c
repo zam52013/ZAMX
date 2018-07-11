@@ -38,14 +38,159 @@
 #include <string.h>
 #include "mathlib.h"
 #include <math.h>
+	#ifdef SYSTEM_SUPPORT_OS
+	#include "includes.h"
+	#endif 
 
  gpgga GPGGA;
-rtkposa RTKPOSA;
+ rtkposa RTKPOSA;
  
+ RTCM_MESG rtcm_msg[RTCM_MESG_CNT];
+ static uint8_t RTCM_BUFF[5];
  void RTK_BASE_Init(void)
  {
 		UARTx_Init(RTK_DAT);
 		UARTx_Init(RTK_RTCM);
+ }
+ 
+ void RTK_RTCM_IRTHandler(void)
+ {
+		uint8_t res = 0;
+	 static uint8_t statu=0;
+	 static uint16_t Char_len=0;
+	 static uint16_t LENTH_STR=0;
+	 static uint16_t msg_lenth=0;
+	 static uint8_t ID_MES=0;
+	 unsigned int msg_id;
+	 
+		#ifdef SYSTEM_SUPPORT_OS
+	OSIntEnter();
+	#endif
+	 if(USART_GetITStatus(RTK_RTCM_USART, USART_IT_RXNE) != RESET) 
+	{
+		res = USART_ReceiveData(RTK_RTCM_USART);
+		switch(statu)
+		{
+			case 0:
+				if(res==0xD3)
+				{
+					RTCM_BUFF[0]=0xD3;
+					Char_len=0;
+					LENTH_STR=0;
+					statu=1;	
+				}
+				break;
+			case 1:
+				RTCM_BUFF[1]=res;
+				statu=2;
+				break;
+			case 2:
+				RTCM_BUFF[2]=res;
+				msg_lenth=(RTCM_BUFF[1]<<8) + RTCM_BUFF[2];
+				if(msg_lenth>=RTCM_BUFF_LEN)
+				{
+					statu=1;
+				}
+				else
+				{	
+					statu=3;
+				}
+				break;
+			case 3:
+				RTCM_BUFF[3]=res;
+				statu=4;
+				break;
+			case 4:
+				RTCM_BUFF[4]=res;
+				msg_id=RTCM_BUFF[3]*16+RTCM_BUFF[4]/16;
+				switch(msg_id)
+				{
+					case 1006:
+						ID_MES=MSG_ID1006;
+						rtcm_msg[ID_MES].head=RTCM_BUFF[0];
+						rtcm_msg[ID_MES].lenth_h=RTCM_BUFF[1];
+						rtcm_msg[ID_MES].lenth_l=RTCM_BUFF[2];
+						rtcm_msg[ID_MES].rtcm_buff[0]=RTCM_BUFF[3];
+						rtcm_msg[ID_MES].rtcm_buff[1]=RTCM_BUFF[4];
+						statu=5;
+						break;
+					case 1033:
+						ID_MES=MSG_ID1033;
+						rtcm_msg[ID_MES].head=RTCM_BUFF[0];
+						rtcm_msg[ID_MES].lenth_h=RTCM_BUFF[1];
+						rtcm_msg[ID_MES].lenth_l=RTCM_BUFF[2];
+						rtcm_msg[ID_MES].rtcm_buff[0]=RTCM_BUFF[3];
+						rtcm_msg[ID_MES].rtcm_buff[1]=RTCM_BUFF[4];
+						statu=5;
+						break;
+					case 1074:
+						ID_MES=MSG_ID1074;
+						rtcm_msg[ID_MES].head=RTCM_BUFF[0];
+						rtcm_msg[ID_MES].lenth_h=RTCM_BUFF[1];
+						rtcm_msg[ID_MES].lenth_l=RTCM_BUFF[2];
+						rtcm_msg[ID_MES].rtcm_buff[0]=RTCM_BUFF[3];
+						rtcm_msg[ID_MES].rtcm_buff[1]=RTCM_BUFF[4];
+						statu=5;
+						break;
+					case 1084:
+						ID_MES=MSG_ID1084;
+						rtcm_msg[ID_MES].head=RTCM_BUFF[0];
+						rtcm_msg[ID_MES].lenth_h=RTCM_BUFF[1];
+						rtcm_msg[ID_MES].lenth_l=RTCM_BUFF[2];
+						rtcm_msg[ID_MES].rtcm_buff[0]=RTCM_BUFF[3];
+						rtcm_msg[ID_MES].rtcm_buff[1]=RTCM_BUFF[4];
+						statu=5;
+						break;
+					case 1094:
+						ID_MES=MSG_ID1094;
+						rtcm_msg[ID_MES].head=RTCM_BUFF[0];
+						rtcm_msg[ID_MES].lenth_h=RTCM_BUFF[1];
+						rtcm_msg[ID_MES].lenth_l=RTCM_BUFF[2];
+						rtcm_msg[ID_MES].rtcm_buff[0]=RTCM_BUFF[3];
+						rtcm_msg[ID_MES].rtcm_buff[1]=RTCM_BUFF[4];
+						statu=5;
+						break;
+					case 1114:
+						ID_MES=MSG_ID1114;
+						rtcm_msg[ID_MES].head=RTCM_BUFF[0];
+						rtcm_msg[ID_MES].lenth_h=RTCM_BUFF[1];
+						rtcm_msg[ID_MES].lenth_l=RTCM_BUFF[2];
+						rtcm_msg[ID_MES].rtcm_buff[0]=RTCM_BUFF[3];
+						rtcm_msg[ID_MES].rtcm_buff[1]=RTCM_BUFF[4];
+						statu=5;
+						break;
+					case 1124:
+						ID_MES=MSG_ID1124;
+						rtcm_msg[ID_MES].head=RTCM_BUFF[0];
+						rtcm_msg[ID_MES].lenth_h=RTCM_BUFF[1];
+						rtcm_msg[ID_MES].lenth_l=RTCM_BUFF[2];
+						rtcm_msg[ID_MES].rtcm_buff[0]=RTCM_BUFF[3];
+						rtcm_msg[ID_MES].rtcm_buff[1]=RTCM_BUFF[4];
+						statu=5;
+						break;
+					default:
+						statu=0;
+						break;
+				}
+				break;
+			case 5:
+				if(LENTH_STR<(Char_len+3))
+				{
+					rtcm_msg[ID_MES].rtcm_buff[LENTH_STR+2]=res;
+					LENTH_STR++;
+				}
+				else
+				{
+						rtcm_msg[ID_MES].rtcm_buff[LENTH_STR+2]=res;
+						rtcm_msg[ID_MES].rtcm_flag=TRUE;
+						statu=0;
+				}
+				break;
+		}
+	}
+	 	#ifdef SYSTEM_SUPPORT_OS
+	OSIntExit();
+	#endif 
  }
  /********************************************************************
 
@@ -217,19 +362,19 @@ unsigned Nmea_parse_PSRPOSA(char* buffe,int buff_len)
 }
  
  	/**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */
 
 /**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */ 
 
 /************************ (C) COPYRIGHT feima *****END OF FILE****/

@@ -42,7 +42,9 @@
 	#endif
 	 
 	 #include "board.h"
-
+	 
+	#define RTCM_BUFF_LEN 300
+	 #define RTCM_MESG_CNT 7
 	 #define NOWALT
 	 
 	 #ifdef NOWALT
@@ -72,8 +74,29 @@
 	 
 	 
 	 #endif
-	 
-	typedef struct
+
+
+typedef enum
+{
+	MSG_ID1006=0,
+	MSG_ID1033,
+	MSG_ID1074,
+	MSG_ID1084,
+	MSG_ID1094,
+	MSG_ID1114,
+	MSG_ID1124
+}RTCM_MSG_ID;
+
+typedef struct
+{
+	uint8_t rtcm_flag;
+	uint8_t head;
+	uint8_t lenth_h;
+	uint8_t lenth_l;
+	uint8_t rtcm_buff[RTCM_BUFF_LEN];
+}RTCM_MESG;
+
+typedef struct
 {
 	double utc;				//UTC 时间
 	double lat;				//纬度
@@ -97,6 +120,7 @@ typedef struct
 	double hgt;				//高程
 }rtkposa;
 
+	 extern RTCM_MESG rtcm_msg[RTCM_MESG_CNT];
 	 void RTK_BASE_Init(void);
 	 
 		#ifdef __cplusplus

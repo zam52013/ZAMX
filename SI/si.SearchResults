@@ -1,0 +1,8 @@
+---- CS_OFF Matches (7 in 4 files) ----
+Fm25v.c (e:\fm-base\src\drivers\fram):	FM25V_X_select(FM25V_CS,FM25V_ID,CS_OFF);
+Fm25v.c (e:\fm-base\src\drivers\fram):	FM25V_X_select(FM25V_CS,FM25V_ID,CS_OFF);
+Fm25v.c (e:\fm-base\src\drivers\fram):	FM25V_X_select(FM25V_CS,FM25V_ID,CS_OFF);
+Mpu9250.c (e:\fm-base\src\drivers\mpu9250):	MPU9250_X_select(MPU9250_CS,MPU9250_ID,CS_OFF);
+Mpu9250.c (e:\fm-base\src\drivers\mpu9250):	MPU9250_X_select(MPU9250_CS,MPU9250_ID,CS_OFF);
+Spi.c (e:\fm-base\board_driver\spi):					else if(CS_OFF)
+Spi.h (e:\fm-base\board_driver\spi):	CS_OFF=0,

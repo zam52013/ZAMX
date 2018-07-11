@@ -35,7 +35,9 @@
 .\objects\rtk_base.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h
 .\objects\rtk_base.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 .\objects\rtk_base.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
-.\objects\rtk_base.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
+.\objects\rtk_base.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma2d.h
+.\objects\rtk_base.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fmc.h
+.\objects\rtk_base.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sai.h
 .\objects\rtk_base.o: ..\Board_Driver\iic\iic.h
 .\objects\rtk_base.o: ..\Board_Driver\spi\spi.h
 .\objects\rtk_base.o: ..\Board_Driver\board_defconfig.h
@@ -46,3 +48,11 @@
 .\objects\rtk_base.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\rtk_base.o: ..\Src\lib\mathlib.h
 .\objects\rtk_base.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+.\objects\rtk_base.o: ..\Planforms\UCOSII\CONFIG\includes.h
+.\objects\rtk_base.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\rtk_base.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
+.\objects\rtk_base.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\rtk_base.o: ..\Planforms\UCOSII\CORE\ucos_ii.h
+.\objects\rtk_base.o: ..\Planforms\UCOSII\CONFIG\includes.h
+.\objects\rtk_base.o: ..\Planforms\UCOSII\CONFIG\os_cfg.h
+.\objects\rtk_base.o: ..\Planforms\UCOSII\PORT\os_cpu.h

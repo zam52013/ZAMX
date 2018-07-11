@@ -52,10 +52,10 @@
 /***fram***/
 static SPIx_Cs FMXV_CS=
 {
-		.GPIO_PORT_CS=GPIOA,
+		.GPIO_PORT_CS=GPIOI,
 		.GPIO_CS_CLK=RCC_AHB1PeriphClockCmd,
-		.CS_Func=RCC_AHB1Periph_GPIOA,
-		.CS_Pin=GPIO_Pin_5
+		.CS_Func=RCC_AHB1Periph_GPIOI,
+		.CS_Pin=GPIO_Pin_0
 };
 
 #define FM25V_ID 1
@@ -99,65 +99,65 @@ static SPIx_Cs* MPU9250_CS=&MPUX_CS;
 
 static GPIO_Driver POW_Gpio1=
 {
-	.GPIO_X=GPIOF,
+	.GPIO_X=GPIOE,
 	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
 	.GPIO_Init_Def=
 	{
-		.GPIO_Pin=GPIO_Pin_8,
+		.GPIO_Pin=GPIO_Pin_2,
 		.GPIO_Mode=GPIO_Mode_OUT,
 		.GPIO_Speed=GPIO_Speed_100MHz,
 		.GPIO_OType=GPIO_OType_PP,
 		.GPIO_PuPd=GPIO_PuPd_NOPULL
 	},
-	.GPIO_Func=RCC_AHB1Periph_GPIOF
+	.GPIO_Func=RCC_AHB1Periph_GPIOE
 };
 static GPIO_Driver* POW_GPIO1=&POW_Gpio1;
 
 static GPIO_Driver POW_Gpio2=
 {
-	.GPIO_X=GPIOF,
+	.GPIO_X=GPIOE,
 	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
 	.GPIO_Init_Def=
 	{
-		.GPIO_Pin=GPIO_Pin_9,
+		.GPIO_Pin=GPIO_Pin_3,
 		.GPIO_Mode=GPIO_Mode_OUT,
 		.GPIO_Speed=GPIO_Speed_100MHz,
 		.GPIO_OType=GPIO_OType_PP,
 		.GPIO_PuPd=GPIO_PuPd_NOPULL
 	},
-	.GPIO_Func=RCC_AHB1Periph_GPIOF
+	.GPIO_Func=RCC_AHB1Periph_GPIOE
 };
 static GPIO_Driver* POW_GPIO2=&POW_Gpio2;
 
 static GPIO_Driver STAT_Gpio1=
 {
-	.GPIO_X=GPIOF,
+	.GPIO_X=GPIOE,
 	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
 	.GPIO_Init_Def=
 	{
-		.GPIO_Pin=GPIO_Pin_10,
+		.GPIO_Pin=GPIO_Pin_4,
 		.GPIO_Mode=GPIO_Mode_OUT,
 		.GPIO_Speed=GPIO_Speed_100MHz,
 		.GPIO_OType=GPIO_OType_PP,
 		.GPIO_PuPd=GPIO_PuPd_NOPULL
 	},
-	.GPIO_Func=RCC_AHB1Periph_GPIOF
+	.GPIO_Func=RCC_AHB1Periph_GPIOE
 };
 static GPIO_Driver* STAT_GPIO1=&STAT_Gpio1;
 
 static GPIO_Driver STAT_Gpio2=
 {
-	.GPIO_X=GPIOF,
+	.GPIO_X=GPIOE,
 	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
 	.GPIO_Init_Def=
 	{
-		.GPIO_Pin=GPIO_Pin_11,
+		.GPIO_Pin=GPIO_Pin_5,
 		.GPIO_Mode=GPIO_Mode_OUT,
 		.GPIO_Speed=GPIO_Speed_100MHz,
 		.GPIO_OType=GPIO_OType_PP,
 		.GPIO_PuPd=GPIO_PuPd_NOPULL
 	},
-	.GPIO_Func=RCC_AHB1Periph_GPIOF
+	.GPIO_Func=RCC_AHB1Periph_GPIOE
 };
 static GPIO_Driver* STAT_GPIO2=&STAT_Gpio2;
 
@@ -220,9 +220,12 @@ static GPIO_Driver* SIM7600_FLIGHT_GPIO=&SIM7600_FLIGHT_Gpio;
 
 
 /***RTK init***/
-static USART_Driver* RTK_DAT=&Seril_A;
-static USART_Driver* RTK_RTCM=&Seril_A;
-
+static USART_Driver* RTK_DAT=&Seril_B;
+static USART_Driver* RTK_RTCM=&Seril_C;
+#define RTK_RTCM_IRTHandler USART3_IRQHandler
+#define RTK_RTCM_USART USART3
+/***wifi init***/
+static USART_Driver* ESP_PER=&Seril_A;
 /************************************************************************************************/
 
 
@@ -233,19 +236,19 @@ static USART_Driver* RTK_RTCM=&Seril_A;
  #endif
  
  /**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */
 
 /**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */ 
 
 /************************ (C) COPYRIGHT feima *****END OF FILE****/

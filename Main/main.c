@@ -62,7 +62,6 @@ OS_STK START_TASK_STK[START_STK_SIZE];			/*create task*/
 OS_STK LED_TASK_STK[LED_STK_SIZE];				/*LED task*/
  /*****************************************************/
 
-
 int main(void)
 {
 	SystemInit(); 
@@ -86,7 +85,9 @@ int main(void)
 	#endif  
 /********************************  */
 	LED_Init();
-	
+	fm25v_init();
+	MPU9250_Init();
+
 /***********OS setup****************/
 	OSInit(); 
 	OSTaskCreate(start_task,(void *)0,(OS_STK *)&START_TASK_STK[START_STK_SIZE-1],START_TASK_PRIO );//创建起始任务
@@ -110,15 +111,22 @@ void start_task(void *pdata)
 	OSTaskSuspend(START_TASK_PRIO); //挂起起始任务.
   OS_EXIT_CRITICAL();             //退出临界区(可以被中断打断)
 }
-    
+
+uint8_t buff[18]="OK-ZAM-HELLO-FEIMA";
 void led_task(void *pdata)
 {
+ 	uint32_t dt;
+	uint8_t buffa[18];
 	while(1)
 	{
-		OSTimeDlyHMSM(0,0,0,1000);
+		OSTimeDlyHMSM(0,0,1,0);
 		LED_Out(POW_GPIO1,ON_OFF);
-		printf("get_time=%d\r\n",OSTimeGet());
+		dt=micros();
+		Get_Raw_Date();
+		printf("get_time=%d\r\n",dt);
+		//Fram_read(0x0000,18,&buffa[0]);
 	}
+		
 }
 
 	/**

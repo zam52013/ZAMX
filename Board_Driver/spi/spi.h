@@ -128,16 +128,16 @@ static SPI_Driver SPI_DEV2=
 	.SPI_CLK=RCC_APB1PeriphClockCmd,
 	.SPI_Func=RCC_APB1Periph_SPI2,
 
-	.Gpio=GPIOB,
+	.Gpio=GPIOI,
 	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
-	.GPIO_Func=RCC_AHB1Periph_GPIOB,
+	.GPIO_Func=RCC_AHB1Periph_GPIOI,
 
-	.SCK_Pin=GPIO_Pin_13,
-	.MISO_Pin=GPIO_Pin_14,
-	.MOSI_Pin=GPIO_Pin_15,
-	.SCK_Src=GPIO_PinSource13,
-	.MISO_Src=GPIO_PinSource14,
-	.MOSI_Src=GPIO_PinSource15,
+	.SCK_Pin=GPIO_Pin_1,
+	.MISO_Pin=GPIO_Pin_2,
+	.MOSI_Pin=GPIO_Pin_3,
+	.SCK_Src=GPIO_PinSource1,
+	.MISO_Src=GPIO_PinSource2,
+	.MOSI_Src=GPIO_PinSource3,
 
 	.SPI_Init_Def={
 		.SPI_Direction=SPI_Direction_2Lines_FullDuplex,
@@ -146,7 +146,7 @@ static SPI_Driver SPI_DEV2=
 		.SPI_CPOL=SPI_CPOL_High,
 		.SPI_CPHA=SPI_CPHA_2Edge,
 		.SPI_NSS=SPI_NSS_Soft,
-		.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_4,
+		.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_16,
 		.SPI_FirstBit=SPI_FirstBit_MSB,
 		.SPI_CRCPolynomial=7
 	},
