@@ -63,23 +63,6 @@ static SPIx_Cs FMXV_CS=
 static SPI_Driver* FM25V=&SPI_DEV2;	 
 static SPIx_Cs* FM25V_CS=&FMXV_CS;
 
-/***key***/
-static GPIO_Driver KEY_Gpio=
-{
-	.GPIO_X=GPIOA,
-	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
-	.GPIO_Init_Def=
-	{
-		.GPIO_Pin=GPIO_Pin_7,
-		.GPIO_Mode=GPIO_Mode_IN,
-		.GPIO_Speed=GPIO_Speed_50MHz,
-		.GPIO_OType=GPIO_OType_PP,
-		.GPIO_PuPd=GPIO_PuPd_UP
-	},
-	.GPIO_Func=RCC_AHB1Periph_GPIOA
-};
-static GPIO_Driver* KEY_GPIO=&KEY_Gpio;
-
 /***MPU9250***/
 static SPIx_Cs MPUX_CS=
 {
@@ -94,6 +77,22 @@ static SPIx_Cs MPUX_CS=
 static SPI_Driver* MPU9250=&SPI_DEV3;	 
 static SPIx_Cs* MPU9250_CS=&MPUX_CS;
 
+/***key***/
+static GPIO_Driver KEY_Gpio=
+{
+	.GPIO_X=GPIOF,
+	.GPIO_CLK=RCC_AHB1PeriphClockCmd,
+	.GPIO_Init_Def=
+	{
+		.GPIO_Pin=GPIO_Pin_12,
+		.GPIO_Mode=GPIO_Mode_IN,
+		.GPIO_Speed=GPIO_Speed_100MHz,
+		.GPIO_OType=GPIO_OType_PP,
+		.GPIO_PuPd=GPIO_PuPd_UP
+	},
+	.GPIO_Func=RCC_AHB1Periph_GPIOF
+};
+static GPIO_Driver* KEY_GPIO=&KEY_Gpio;
 
 /***LED***/
 
@@ -178,9 +177,6 @@ static GPIO_Driver POW_Gpio=
 };
 static GPIO_Driver* POW_GPIO=&POW_Gpio;
 
-/***SOUCE init***/
-static USART_Driver* SOUCE_PER=&Seril_A;
-
 /***SIM7600 init***/
 static USART_Driver* SIM7600_PER=&Seril_A;
 #define SIM7600_IRTHandler USART1_IRQHandler
@@ -218,14 +214,29 @@ static GPIO_Driver SIM7600_FLIGHT_Gpio=
 };
 static GPIO_Driver* SIM7600_FLIGHT_GPIO=&SIM7600_FLIGHT_Gpio;
 
+/***SOUCE init***/
+static USART_Driver* SOUCE_PER=&Seril_A;
 
 /***RTK init***/
-static USART_Driver* RTK_DAT=&Seril_B;
-static USART_Driver* RTK_RTCM=&Seril_C;
-#define RTK_RTCM_IRTHandler USART3_IRQHandler
-#define RTK_RTCM_USART USART3
+static USART_Driver* RTK_DAT=&Seril_C;
+static USART_Driver* RTK_RTCM=&Seril_H;
+
+#define RTK_DAT_IRTHandler USART3_IRQHandler
+#define RTK_DAT_UART USART3
+
+#define RTK_RTCM_IRTHandler UART8_IRQHandler
+#define RTK_RTCM_UART UART8
+
 /***wifi init***/
-static USART_Driver* ESP_PER=&Seril_A;
+static USART_Driver* ESP_PER=&Seril_D;
+#define ESP_IRTHandler UART4_IRQHandler
+#define ESP_UART UART4
+/************************************************************************************************/
+
+/***radio init***/
+static USART_Driver* RADIO_PER=&Seril_B;
+#define RADIO_IRTHandler USART2_IRQHandler
+#define RADIO_UART USART2
 /************************************************************************************************/
 
 

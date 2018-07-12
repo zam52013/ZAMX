@@ -474,7 +474,7 @@ static int8_t send_at_command(char *send_str,char *excepted_recv_str,uint8_t wai
 		while(USART_GetFlagStatus(GSM_USART, USART_FLAG_TC) == RESET);
 		USART_SendData(GSM_USART,*send_str);
 	}
-	UART_SendString(GSM_USART,"\r\n");
+	UART_SendString(SIM7600_PER,"\r\n");
 	if((excepted_recv_str != NULL)&&(wait_time > 0))
 	{
 		start_at_ack_timer(wait_time);//启动超时控制定时器
@@ -580,8 +580,8 @@ int8_t wait_creg(void)
   	while(i == 0)        			
 	{
 		clear_buf();  
-		UART_SendString(GSM_USART,"AT+CREG?");
-		UART_SendString(GSM_USART,"\r\n");
+		UART_SendString(SIM7600_PER,"AT+CREG?");
+		UART_SendString(SIM7600_PER,"\r\n");
 		OSTimeDlyHMSM(0,0,0,1000);  	
 		if(first_command)
 		{

@@ -60,14 +60,18 @@ __ALIGN_BEGIN USB_OTG_CORE_HANDLE    USB_OTG_dev __ALIGN_END ;
 /*******************task stk set*************************/
 OS_STK START_TASK_STK[START_STK_SIZE];			/*create task*/
 OS_STK LED_TASK_STK[LED_STK_SIZE];				/*LED task*/
- /*****************************************************/
+OS_STK KEY_TASK_STK[KEY_STK_SIZE];				/*KEY task*/
+OS_STK OEM_RTCM_TASK_STK[OEM_RTCM_STK_SIZE];				/*OEM RTCM task*/
+OS_STK RTK_DATE_TASK_STK[RTK_DATE_STK_SIZE];				/*RTK DATE task*/
+OS_STK ESP_DATE_TASK_STK[ESP_DATE_STK_SIZE];				/*ESP DATE task*/
+/*****************************************************/
 
 int main(void)
 {
 	SystemInit(); 
 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);//
 	cycleCounterInit();
-	SysTick_Config(SystemCoreClock / 1000);		//	1ms base time
+	SysTick_Config(SystemCoreClock / 1000);		//	1ms base time	
 	SOUNCE_Init();
 /***************USB***********************/
 	#ifdef USE_USB_OTG_FS
@@ -87,7 +91,9 @@ int main(void)
 	LED_Init();
 	fm25v_init();
 	MPU9250_Init();
-
+	Key_Init();
+	RTK_BASE_Init();
+	Wifi_Esp_Init();
 /***********OS setup****************/
 	OSInit(); 
 	OSTaskCreate(start_task,(void *)0,(OS_STK *)&START_TASK_STK[START_STK_SIZE-1],START_TASK_PRIO );//创建起始任务
@@ -96,6 +102,7 @@ int main(void)
 
 	while(1)
 	{
+		OSTimeDlyHMSM(0,0,1,0);
 		//printf("ok\r\n");
 	}
 }
@@ -107,7 +114,15 @@ void start_task(void *pdata)
   OS_ENTER_CRITICAL();            //进入临界区(无法被中断打断)
 
 	OSTaskCreate(led_task, (void *)0, (OS_STK*)&LED_TASK_STK[LED_STK_SIZE - 1], LED_TASK_PRIO);
-
+	OSTaskCreate(key_task, (void *)0, (OS_STK*)&KEY_TASK_STK[KEY_STK_SIZE - 1], KEY_TASK_PRIO);
+	OSTaskCreate(oem_rtcm_task, (void *)0, (OS_STK*)&OEM_RTCM_TASK_STK[OEM_RTCM_STK_SIZE - 1], OEM_RTCM_TASK_PRIO);
+	OSTaskCreate(rtk_date_task, (void *)0, (OS_STK*)&RTK_DATE_TASK_STK[RTK_DATE_STK_SIZE - 1], RTK_DATE_TASK_PRIO);
+	OSTaskCreate(esp_date_task, (void *)0, (OS_STK*)&ESP_DATE_TASK_STK[ESP_DATE_STK_SIZE - 1], ESP_DATE_TASK_PRIO);
+	
+	OEM_RTCM_Semp=OSSemCreate(0);
+	RTK_DATE_Semp=OSSemCreate(0);
+	ESP_DATE_Semp=OSSemCreate(0);
+	
 	OSTaskSuspend(START_TASK_PRIO); //挂起起始任务.
   OS_EXIT_CRITICAL();             //退出临界区(可以被中断打断)
 }
@@ -115,20 +130,79 @@ void start_task(void *pdata)
 uint8_t buff[18]="OK-ZAM-HELLO-FEIMA";
 void led_task(void *pdata)
 {
- 	uint32_t dt;
-	uint8_t buffa[18];
+ 	static uint32_t dt;
+	static uint8_t buffa[18];
 	while(1)
 	{
 		OSTimeDlyHMSM(0,0,1,0);
 		LED_Out(POW_GPIO1,ON_OFF);
-		dt=micros();
-		Get_Raw_Date();
-		printf("get_time=%d\r\n",dt);
-		//Fram_read(0x0000,18,&buffa[0]);
-	}
-		
+		UART_SendString(ESP_PER,"AT\r\n");
+		//dt=micros();
+		//Get_Raw_Date();
+		//printf("get_time=%d\r\n",dt);
+		Fram_read(0x0000,18,&buffa[0]);
+	}	
 }
 
+void key_task(void *pdata)
+{
+	static unsigned char key_sttus=0;
+	while(1)
+	{
+		OSTimeDlyHMSM(0,0,0,10);
+		key_sttus=Key_Scan();
+	}	
+}
+void oem_rtcm_task(void *pdata)
+{
+	INT8U err;
+	static unsigned int crc_value_rtcm=0;
+	static unsigned char rtcm_cnt=0;
+	while(1)
+	{
+		OSSemPend(OEM_RTCM_Semp,0,&err);
+		for(rtcm_cnt=0;rtcm_cnt<7;rtcm_cnt++)
+		{
+				if(rtcm_msg[rtcm_cnt].rtcm_flag==1)
+				{
+					crc_value_rtcm=CRC_Octets(&rtcm_msg[rtcm_cnt].head,(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+3);
+					if(crc_value_rtcm==((rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l]<<16)+
+					(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+1]<<8)+
+					(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+2])))
+					{
+						USARTx_SendBytes(RTK_RTCM,&rtcm_msg[rtcm_cnt].head,rtcm_msg[rtcm_cnt].lenth_h*256+rtcm_msg[rtcm_cnt].lenth_l+6);
+					}
+					rtcm_msg[rtcm_cnt].rtcm_flag=0;
+				}
+		}
+	}
+}
+void rtk_date_task(void *pdata)
+{
+	INT8U err;
+	while(1)
+	{
+		OSSemPend(RTK_DATE_Semp,0,&err);
+		if(rtk_date_mesg.rtk_date_flag==1)
+		{
+			USARTx_SendBytes(RTK_DAT,&rtk_date_mesg.rtcm_buff[0],rtk_date_mesg.rtk_date_lenth);
+			rtk_date_mesg.rtk_date_flag=0;
+		}
+	}
+}
+
+void esp_date_task(void *pdata)
+{
+	INT8U err;
+	while(1)
+	{
+		OSSemPend(ESP_DATE_Semp,0,&err);
+		if(esp_mesg.esp__date_flag==1)
+		{
+			Clean_ESP_date();
+		}
+	}
+}
 	/**
   * @
   */ 

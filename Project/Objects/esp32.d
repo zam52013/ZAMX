@@ -44,3 +44,13 @@
 .\objects\esp32.o: ..\Board_Driver\times\times.h
 .\objects\esp32.o: ..\Board_Driver\uart\uart.h
 .\objects\esp32.o: ..\Board_Driver\gpio\gpio.h
+.\objects\esp32.o: ..\Planforms\UCOSII\CONFIG\includes.h
+.\objects\esp32.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\esp32.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\esp32.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
+.\objects\esp32.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\esp32.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\esp32.o: ..\Planforms\UCOSII\CORE\ucos_ii.h
+.\objects\esp32.o: ..\Planforms\UCOSII\CONFIG\includes.h
+.\objects\esp32.o: ..\Planforms\UCOSII\CONFIG\os_cfg.h
+.\objects\esp32.o: ..\Planforms\UCOSII\PORT\os_cpu.h

@@ -41,17 +41,35 @@
 	#endif
 	 
 	 #include "board.h" 
+	 	 #ifdef SYSTEM_SUPPORT_OS
+#include "includes.h"
+#endif
+	 
+	 #define ESP_BUFF_LEN 1024
 	 
 	 #define CMD_TEST "AT\r\n"
 	 #define CMD_CLOSE_SR "ATE0\r\n"
 	 #define CMD_MODE "AT+CWMODE=2\r\n"
 	 #define CMD_MUX "AT+CIPMUX=1\r\n"
-	 #define CMD_SEVER "AT+CIPSERVER=1,8888\r\n"
+	 #define CMD_SEVER "AT+CIPSERVER=1,8080\r\n"
 	 #define CMD_SAP "AT+CWSAP=\"FM-BASE\",\"12345678\",1,3\r\n"
-	 #define CMD_SEND "AT+CIPSEND=0,6\r\n"
+	 #define CMD_SEND "AT+CIPSEND=0,6\r\n" 
+	 #define CMD_IP "AT+CIPAP=\"135.154.2.1\",\"135.154.2.1\",\"255.255.255.0\""
 	 
+	 typedef struct
+	 {
+			uint8_t esp__date_flag;
+			uint16_t esp_date_lenth;
+			uint8_t esp_date_buff[];
+	 }ESP_MESG;
 	 
-	  void Wifi_Esp_Init(void);
+	 #ifdef SYSTEM_SUPPORT_OS
+	extern OS_EVENT *ESP_DATE_Semp;
+	#endif
+	 extern ESP_MESG esp_mesg;
+	 
+	 void Wifi_Esp_Init(void);
+	 void Clean_ESP_date(void);
 	 
 	 	#ifdef __cplusplus
 	}

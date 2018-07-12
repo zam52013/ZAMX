@@ -51,7 +51,7 @@
 				}
 			}
 		}
-		return crc & 0xffffff;
+		return (crc & 0xffffff);
  }
  
  

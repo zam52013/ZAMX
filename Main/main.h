@@ -59,14 +59,18 @@
 #include "souce.h"
 #include "pow_ctr.h"
 #include "led.h"
+#include "rtk_base.h"
+#include "esp32.h"
+#include "radio.h"
 /***********************************************/
 
-
-
+/******************lib**************************/
+#include "crc24.h"
+/***********************************************/
 
 /****************UCOSII TASK*************************/
 //task init
-#define START_TASK_PRIO                 13 //设置任务优先级
+#define START_TASK_PRIO                 25 //设置任务优先级
 #define START_STK_SIZE                  64  //设置任务堆栈大小
 void start_task(void *pdata);			//任务函数
 
@@ -75,6 +79,25 @@ void start_task(void *pdata);			//任务函数
 #define LED_STK_SIZE                  64  //设置任务堆栈大小
 void led_task(void *pdata);				//任务函数
 
+//KEY task
+#define KEY_TASK_PRIO                 5 //设置任务优先级
+#define KEY_STK_SIZE                  64  //设置任务堆栈大小
+void key_task(void *pdata);				//任务函数
+
+//OEM get rtcm task
+#define OEM_RTCM_TASK_PRIO                 8 //设置任务优先级
+#define OEM_RTCM_STK_SIZE                  64  //设置任务堆栈大小
+void oem_rtcm_task(void *pdata);				//任务函数
+
+//OEM get date task
+#define RTK_DATE_TASK_PRIO                 9 //设置任务优先级
+#define RTK_DATE_STK_SIZE                  64  //设置任务堆栈大小
+void rtk_date_task(void *pdata);				//任务函数
+
+//ESP get date task
+#define ESP_DATE_TASK_PRIO                 10 //设置任务优先级
+#define ESP_DATE_STK_SIZE                  64  //设置任务堆栈大小
+void esp_date_task(void *pdata);				//任务函数
 /***************************************************/
 
 

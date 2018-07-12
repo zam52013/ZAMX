@@ -65,6 +65,7 @@
 
  void UARTx_Init(USART_Driver* USARTx)
  {
+	 uint8_t UART_TI_CNT=0;
 	GPIO_InitTypeDef GPIO_InitStructure; 
  	USART_InitTypeDef USART_InitStructure; 
 	 #ifdef USARTx_USE_DMA
@@ -95,10 +96,43 @@
   	USART_InitStructure.USART_Parity = USARTx->InitTypeDef.USART_Parity;
   	USART_InitStructure.USART_HardwareFlowControl = USARTx->InitTypeDef.USART_HardwareFlowControl;
   	USART_InitStructure.USART_Mode = USARTx->InitTypeDef.USART_Mode;
-	USART_Init(USARTx->USART, &USART_InitStructure); 
-	USART_ITConfig(USARTx->USART, USARTx->NVIC_FLAG, ENABLE);
- 	USART_ClearFlag(USARTx->USART,  USARTx->NVIC_FLAG ); 
-	
+	USART_Init(USARTx->USART, &USART_InitStructure);
+	for(UART_TI_CNT=0;UART_TI_CNT<4;UART_TI_CNT++)
+	{
+		switch(USARTx->NVIC_FLAG[UART_TI_CNT])
+		{
+			case USART_IT_CTS:
+				USART_ITConfig(USARTx->USART, USART_IT_CTS, ENABLE);
+				USART_ClearFlag(USARTx->USART, USART_IT_CTS);
+				break;
+			case USART_IT_LBD:
+				USART_ITConfig(USARTx->USART, USART_IT_LBD, ENABLE);
+				USART_ClearFlag(USARTx->USART, USART_IT_LBD);
+				break;
+			case USART_IT_TXE:
+				USART_ITConfig(USARTx->USART, USART_IT_TXE, ENABLE);
+				break;
+			case USART_IT_TC:
+				USART_ITConfig(USARTx->USART, USART_IT_TC, ENABLE);
+				USART_ClearFlag(USARTx->USART, USART_IT_TC);
+				break;
+			case USART_IT_RXNE:
+				USART_ITConfig(USARTx->USART, USART_IT_RXNE, ENABLE);
+				USART_ClearFlag(USARTx->USART, USART_IT_RXNE);	
+				break;
+			case USART_IT_IDLE:
+				USART_ITConfig(USARTx->USART, USART_IT_IDLE, ENABLE);
+				break;
+			case USART_IT_PE:
+				USART_ITConfig(USARTx->USART, USART_IT_PE, ENABLE);
+				break;
+			case USART_IT_ERR:
+				USART_ITConfig(USARTx->USART, USART_IT_ERR, ENABLE);
+				break;
+			default:
+				break;
+		}
+	}
 	NVIC_Init(&USARTx->NVIC_USART);	
 
 	#ifdef USARTx_USE_DMA
@@ -173,38 +207,39 @@ void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint8_t length)
 {
 	uint8_t i = 0;
 	
-	while(i++ < length)
+	while(i < length)
 	{
 		while (USART_GetFlagStatus(USARTx->USART, USART_FLAG_TC) == RESET);
 		USART_SendData(USARTx->USART, buffer[i]);
+		i++;
 	}
 }
 
-void UART_SendString(USART_TypeDef* USARTx,char* s)
+void UART_SendString(USART_Driver* USARTx,char* s)
 {
 	while(*s)//¼ì²â×Ö·û´®½áÊø·û
 	{
-		while(USART_GetFlagStatus(USARTx, USART_FLAG_TC)==RESET); 
-		USART_SendData(USARTx ,*s);//·¢ËÍµ±Ç°×Ö·û
+		while(USART_GetFlagStatus(USARTx->USART, USART_FLAG_TC)==RESET); 
+		USART_SendData(USARTx->USART ,*s);//·¢ËÍµ±Ç°×Ö·û
 		s++;
 	}
 }
 
 	
 	/**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */
 
 /**
-  * @}
+  * @
   */ 
 
 /**
-  * @}
+  * @
   */ 
 
 /************************ (C) COPYRIGHT feima *****END OF FILE****/	

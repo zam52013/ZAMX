@@ -80,6 +80,7 @@
 ".\objects\sim7600.o"
 ".\objects\rtk_base.o"
 ".\objects\esp32.o"
+".\objects\radio.o"
 "..\Src\lib\RTCM\rtcm.lib"
 ".\objects\fm_qx.o"
 ".\objects\socket.o"

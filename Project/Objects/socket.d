@@ -77,3 +77,7 @@
 .\objects\socket.o: ..\Src\drivers\SOUNCE\souce.h
 .\objects\socket.o: ..\Src\drivers\POW_CTR\pow_ctr.h
 .\objects\socket.o: ..\Src\drivers\LED\led.h
+.\objects\socket.o: ..\Src\drivers\RTK_BASE\rtk_base.h
+.\objects\socket.o: ..\Src\drivers\Wifi\esp32.h
+.\objects\socket.o: ..\Src\drivers\Radio\radio.h
+.\objects\socket.o: ..\Src\lib\CRC\crc24.h

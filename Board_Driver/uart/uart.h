@@ -64,7 +64,7 @@ typedef void (*RCC_AXXPeriphClockCmd)(uint32_t RCC_AXXPeriph, FunctionalState Ne
 	uint16_t RX_Src;							/* USART_x device TX port io src*/
 
 	NVIC_InitTypeDef NVIC_USART;				/* USART_x device NVIC Config*/
-	uint16_t NVIC_FLAG;						/* USART_x device NVIC flag Config*/
+	uint16_t NVIC_FLAG[4];						/* USART_x device NVIC flag Config*/
 	uint8_t USE_DMA;							/* if true use dma*/
 	
 	#ifdef USARTx_USE_DMA
@@ -127,7 +127,7 @@ static int8_t g_usart1rxfifo[CONFIG_UART1_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_IDLE | USART_IT_RXNE,
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
  	
  	#ifdef CONFIG_UART1_DMA
 	.USE_DMA=1,
@@ -196,7 +196,7 @@ static int8_t g_usart2rxfifo[CONFIG_UART2_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_IDLE | USART_IT_RXNE,
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
  	
  	#ifdef CONFIG_UART2_DMA
 	.USE_DMA=1,
@@ -265,7 +265,7 @@ static int8_t g_usart3rxfifo[CONFIG_UART3_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_IDLE | USART_IT_RXNE,
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
  	
  	#ifdef CONFIG_UART3_DMA
 	.USE_DMA=1,
@@ -335,7 +335,7 @@ static int8_t g_usart4rxfifo[CONFIG_UART4_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_IDLE | USART_IT_RXNE,
+ 	.NVIC_FLAG=USART_IT_RXNE,USART_IT_IDLE,0,0,
  	
  	#ifdef CONFIG_UART4_DMA
 	.USE_DMA=1,
@@ -404,7 +404,7 @@ static int8_t g_usart5rxfifo[CONFIG_UART5_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_IDLE | USART_IT_RXNE,
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
  	
  	#ifdef CONFIG_UART5_DMA
 	.USE_DMA=1,
@@ -473,7 +473,7 @@ static int8_t g_usart6rxfifo[CONFIG_UART6_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_IDLE | USART_IT_RXNE,
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
  	
  	#ifdef CONFIG_UART6_DMA
 	.USE_DMA=1,
@@ -502,7 +502,7 @@ static int8_t g_usart6rxfifo[CONFIG_UART6_DMA_RXBUFSIZE];
 	
 	.GPIO_AF_USART=GPIO_AF_USART6
 };
-/*
+
 #ifdef CONFIG_UART7_DMA
 static int8_t g_usart7txfifo[CONFIG_UART7_DMA_TXBUFSIZE];
 static int8_t g_usart7rxfifo[CONFIG_UART7_DMA_RXBUFSIZE];
@@ -542,7 +542,7 @@ static int8_t g_usart7rxfifo[CONFIG_UART7_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_IDLE | USART_IT_RXNE,
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
  	
  	#ifdef CONFIG_UART7_DMA
 	.USE_DMA=1,
@@ -571,11 +571,81 @@ static int8_t g_usart7rxfifo[CONFIG_UART7_DMA_RXBUFSIZE];
 	
 	.GPIO_AF_USART=GPIO_AF_UART7
 };
-*/
+
+#ifdef CONFIG_UART8_DMA
+static int8_t g_usart8txfifo[CONFIG_UART8_DMA_TXBUFSIZE];
+static int8_t g_usart8rxfifo[CONFIG_UART8_DMA_RXBUFSIZE];
+#endif
+
+ static USART_Driver Seril_H=
+ {
+ 	.USART=UART8,
+	.USART_CLK=RCC_APB1PeriphClockCmd,
+	.USART_Func=RCC_APB1Periph_UART8,
+	
+ 	.InitTypeDef={
+ 		.USART_BaudRate=CONFIG_UART8_BAUD,
+		.USART_WordLength=CONFIG_UART8_BITS,
+		.USART_StopBits=CONFIG_UART8_2STOP,
+		.USART_Parity=CONFIG_UART8_PARITY,
+		.USART_Mode=USART_Mode_Rx | USART_Mode_Tx,
+		.USART_HardwareFlowControl=USART_HardwareFlowControl_None
+		},
+		
+ 	.TX_GPIO=GPIOE,
+ 	.TX_GPIOClk=RCC_AHB1PeriphClockCmd,
+ 	.TX_GPIOFunc=RCC_AHB1Periph_GPIOE,
+ 	.TX_Pin=GPIO_Pin_1,
+ 	.TX_Src=GPIO_PinSource1,
+ 	
+ 	.RX_GPIO=GPIOE,
+ 	.RX_GPIOClk=RCC_AHB1PeriphClockCmd , 
+ 	.RX_GPIOFunc=RCC_AHB1Periph_GPIOE, 
+ 	.RX_Pin=GPIO_Pin_0, 
+ 	.RX_Src=GPIO_PinSource0,
+ 	
+ 	.NVIC_USART={ 
+ 		.NVIC_IRQChannel=UART8_IRQn, 
+		.NVIC_IRQChannelPreemptionPriority=1,
+		.NVIC_IRQChannelSubPriority=2,
+		.NVIC_IRQChannelCmd=ENABLE 
+	},
+	
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
+ 	
+ 	#ifdef CONFIG_UART8_DMA
+	.USE_DMA=1,
+ 	.NVIC_DMA_TX={
+ 		.NVIC_IRQChannel=DMA2_Stream7_IRQn, 
+		.NVIC_IRQChannelPreemptionPriority=1, 
+		.NVIC_IRQChannelSubPriority=3, 
+		.NVIC_IRQChannelCmd=ENABLE 
+	},
+ 	.DMA_CLK=RCC_AHB1PeriphClockCmd, 
+ 	.DMA_Func=RCC_AHB1Periph_DMA2,
+ 	
+ 	.DMA_TX_Size=CONFIG_UART7_DMA_TXBUFSIZE, 
+ 	.DMA_TX_Buffer=g_usart8txfifo, 
+ 	.DMA_TX_Stream=DMA2_Stream7, 
+ 	.DMA_TX_CH=DMA_Channel_4,
+ 	.NVIC_TI_FLAG=DMA_IT_TC,
+ 	
+	.DMA_RX_Size=CONFIG_UART7_DMA_RXBUFSIZE,
+	.DMA_RX_Buffer=g_usart8rxfifo, 
+	.DMA_RX_Stream=DMA2_Stream5, 
+	.DMA_RX_CH=DMA_Channel_4,
+	#else
+	.USE_DMA=0,
+	#endif
+	
+	.GPIO_AF_USART=GPIO_AF_UART8
+};
+ 
+
   void UARTx_Init(USART_Driver* USARTx);
   void USARTx_DeInit(USART_Driver* USARTx);
   void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint8_t length);
-  void UART_SendString(USART_TypeDef* USARTx,char* s);
+  void UART_SendString(USART_Driver* USARTx,char* s);
  #endif
  
  

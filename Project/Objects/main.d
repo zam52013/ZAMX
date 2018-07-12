@@ -73,3 +73,7 @@
 .\objects\main.o: ..\Src\drivers\SOUNCE\souce.h
 .\objects\main.o: ..\Src\drivers\POW_CTR\pow_ctr.h
 .\objects\main.o: ..\Src\drivers\LED\led.h
+.\objects\main.o: ..\Src\drivers\RTK_BASE\rtk_base.h
+.\objects\main.o: ..\Src\drivers\Wifi\esp32.h
+.\objects\main.o: ..\Src\drivers\Radio\radio.h
+.\objects\main.o: ..\Src\lib\CRC\crc24.h

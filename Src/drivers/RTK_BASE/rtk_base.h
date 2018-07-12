@@ -42,9 +42,15 @@
 	#endif
 	 
 	 #include "board.h"
+	 #ifdef SYSTEM_SUPPORT_OS
+#include "includes.h"
+#endif 
+	 
 	 
 	#define RTCM_BUFF_LEN 300
 	 #define RTCM_MESG_CNT 7
+	 #define RTK_BUFF_LEN 512
+	 
 	 #define NOWALT
 	 
 	 #ifdef NOWALT
@@ -98,6 +104,14 @@ typedef struct
 
 typedef struct
 {
+	uint8_t rtk_date_flag;
+	uint16_t rtk_date_lenth;
+	uint8_t rtcm_buff[RTK_BUFF_LEN];
+}RTK_DATE_MESG;
+
+
+typedef struct
+{
 	double utc;				//UTC 时间
 	double lat;				//纬度
 	char   lat_dir;			//纬度方向
@@ -120,7 +134,13 @@ typedef struct
 	double hgt;				//高程
 }rtkposa;
 
+	 #ifdef SYSTEM_SUPPORT_OS
+	extern OS_EVENT *OEM_RTCM_Semp;
+	extern OS_EVENT *RTK_DATE_Semp;	
+	#endif
+
 	 extern RTCM_MESG rtcm_msg[RTCM_MESG_CNT];
+	extern RTK_DATE_MESG rtk_date_mesg;
 	 void RTK_BASE_Init(void);
 	 
 		#ifdef __cplusplus

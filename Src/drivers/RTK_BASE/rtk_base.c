@@ -38,26 +38,38 @@
 #include <string.h>
 #include "mathlib.h"
 #include <math.h>
-	#ifdef SYSTEM_SUPPORT_OS
-	#include "includes.h"
-	#endif 
+
+
 
  gpgga GPGGA;
  rtkposa RTKPOSA;
  
  RTCM_MESG rtcm_msg[RTCM_MESG_CNT];
  static uint8_t RTCM_BUFF[5];
+ 
+ RTK_DATE_MESG rtk_date_mesg;
+ 
+ #ifdef SYSTEM_SUPPORT_OS
+ OS_EVENT *OEM_RTCM_Semp;
+ OS_EVENT *RTK_DATE_Semp;
+ #endif 
+ 
  void RTK_BASE_Init(void)
  {
+		unsigned char i=0;
 		UARTx_Init(RTK_DAT);
 		UARTx_Init(RTK_RTCM);
+		for(i=0;i<RTCM_MESG_CNT;i++)
+	 {
+		memset(&rtcm_msg[i].rtcm_flag,0,sizeof(RTCM_MESG));
+	 }
+		memset(&rtk_date_mesg.rtk_date_flag,0,sizeof(RTK_DATE_MESG));
  }
  
  void RTK_RTCM_IRTHandler(void)
  {
 		uint8_t res = 0;
 	 static uint8_t statu=0;
-	 static uint16_t Char_len=0;
 	 static uint16_t LENTH_STR=0;
 	 static uint16_t msg_lenth=0;
 	 static uint8_t ID_MES=0;
@@ -66,16 +78,15 @@
 		#ifdef SYSTEM_SUPPORT_OS
 	OSIntEnter();
 	#endif
-	 if(USART_GetITStatus(RTK_RTCM_USART, USART_IT_RXNE) != RESET) 
+	 if(USART_GetITStatus(RTK_RTCM_UART, USART_IT_RXNE) != RESET) 
 	{
-		res = USART_ReceiveData(RTK_RTCM_USART);
+		res = USART_ReceiveData(RTK_RTCM_UART);
 		switch(statu)
 		{
 			case 0:
 				if(res==0xD3)
 				{
 					RTCM_BUFF[0]=0xD3;
-					Char_len=0;
 					LENTH_STR=0;
 					statu=1;	
 				}
@@ -174,7 +185,7 @@
 				}
 				break;
 			case 5:
-				if(LENTH_STR<(Char_len+3))
+				if(LENTH_STR<(msg_lenth))
 				{
 					rtcm_msg[ID_MES].rtcm_buff[LENTH_STR+2]=res;
 					LENTH_STR++;
@@ -184,11 +195,76 @@
 						rtcm_msg[ID_MES].rtcm_buff[LENTH_STR+2]=res;
 						rtcm_msg[ID_MES].rtcm_flag=TRUE;
 						statu=0;
+						OSSemPost(OEM_RTCM_Semp);
 				}
 				break;
 		}
 	}
-	 	#ifdef SYSTEM_SUPPORT_OS
+	 #ifdef SYSTEM_SUPPORT_OS
+	OSIntExit();
+	#endif 
+ }
+ 
+ void RTK_DAT_IRTHandler(void)
+ {
+	 uint8_t res = 0;
+	 static uint8_t statu=0;
+	#ifdef SYSTEM_SUPPORT_OS
+	OSIntEnter();
+	#endif
+	 
+	 if(USART_GetITStatus(RTK_DAT_UART, USART_IT_RXNE)!=RESET)
+	 {
+			res =USART_ReceiveData(RTK_DAT_UART);
+			if(rtk_date_mesg.rtk_date_flag==0)
+			{
+				switch(statu)
+				{
+					case 0:
+						memset(rtk_date_mesg.rtcm_buff,0,RTK_BUFF_LEN);
+						rtk_date_mesg.rtk_date_lenth=0;
+						statu=1;
+						rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+						rtk_date_mesg.rtk_date_lenth++;
+						break;
+					case 1:
+						if(res==0x0d)
+						{
+							statu=2;
+							rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+							rtk_date_mesg.rtk_date_lenth++;
+						}
+						else
+						{
+							rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+							rtk_date_mesg.rtk_date_lenth++;
+						}
+						if(rtk_date_mesg.rtk_date_lenth>RTK_BUFF_LEN)
+						{
+							statu=0;
+						}
+						break;
+					case 2:
+						if(res==0x0a)
+						{
+							rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+							rtk_date_mesg.rtk_date_lenth++;
+							statu=0;
+							rtk_date_mesg.rtk_date_flag=1;
+							OSSemPost(RTK_DATE_Semp);
+						}
+						else
+						{
+							statu=0;
+						}
+						break;
+						default:
+							break;
+				}
+			}
+	 }
+	 
+	#ifdef SYSTEM_SUPPORT_OS
 	OSIntExit();
 	#endif 
  }
