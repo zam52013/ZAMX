@@ -54,13 +54,13 @@
 	 #define CMD_SEVER "AT+CIPSERVER=1,8080\r\n"
 	 #define CMD_SAP "AT+CWSAP=\"FM-BASE\",\"12345678\",1,3\r\n"
 	 #define CMD_SEND "AT+CIPSEND=0,6\r\n" 
-	 #define CMD_IP "AT+CIPAP=\"135.154.2.1\",\"135.154.2.1\",\"255.255.255.0\""
+	 #define CMD_IP "AT+CIPAP=\"135.154.2.1\",\"135.154.2.1\",\"255.255.255.0\"\r\n"
 	 
 	 typedef struct
 	 {
 			uint8_t esp__date_flag;
 			uint16_t esp_date_lenth;
-			uint8_t esp_date_buff[];
+			uint8_t esp_date_buff[ESP_BUFF_LEN];
 	 }ESP_MESG;
 	 
 	 #ifdef SYSTEM_SUPPORT_OS
@@ -70,6 +70,9 @@
 	 
 	 void Wifi_Esp_Init(void);
 	 void Clean_ESP_date(void);
+	void wifi_tick_time();
+	unsigned char wifi_reg(void);
+	unsigned int wifi_soc_send(unsigned char soc,uint8_t *send_buffer,unsigned int length);
 	 
 	 	#ifdef __cplusplus
 	}

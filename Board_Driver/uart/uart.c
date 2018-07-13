@@ -203,9 +203,9 @@ void USARTx_SendByte(USART_Driver* USARTx, uint8_t byte)
   while (USART_GetFlagStatus(USARTx->USART, USART_FLAG_TC) == RESET);
 }
 
-void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint8_t length)
+void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint16_t length)
 {
-	uint8_t i = 0;
+	uint16_t i = 0;
 	
 	while(i < length)
 	{

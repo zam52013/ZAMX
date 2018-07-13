@@ -118,6 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name>8?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -149,34 +150,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>124</LineNumber>
+          <LineNumber>206</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134233488</Address>
+          <Address>134246150</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Board_Driver\uart\uart.c</Filename>
+          <Filename>..\Src\drivers\Wifi\esp32.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\FM_Base\../Board_Driver/uart/uart.c\124</Expression>
+          <Expression>\\FM_Base\../Src/drivers/Wifi/esp32.c\206</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>120</LineNumber>
+          <LineNumber>67</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134233464</Address>
+          <Address>134231688</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Board_Driver\uart\uart.c</Filename>
+          <Filename>..\Src\drivers\Wifi\esp32.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\FM_Base\../Board_Driver/uart/uart.c\120</Expression>
+          <Expression>\\FM_Base\../Src/drivers/Wifi/esp32.c\67</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -880,7 +881,7 @@
 
   <Group>
     <GroupName>StdPeriph_Driver_Lib\STM32_USB_APP</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1128,7 +1129,7 @@
 
   <Group>
     <GroupName>Board_Driver</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1172,7 +1173,7 @@
       <GroupNumber>10</GroupNumber>
       <FileNumber>73</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Board_Driver\uart\uart.c</PathWithFileName>
@@ -1196,7 +1197,7 @@
 
   <Group>
     <GroupName>Src\drivers</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1404,7 +1405,7 @@
 
   <Group>
     <GroupName>Main</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

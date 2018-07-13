@@ -644,7 +644,7 @@ static int8_t g_usart8rxfifo[CONFIG_UART8_DMA_RXBUFSIZE];
 
   void UARTx_Init(USART_Driver* USARTx);
   void USARTx_DeInit(USART_Driver* USARTx);
-  void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint8_t length);
+  void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint16_t length);
   void UART_SendString(USART_Driver* USARTx,char* s);
  #endif
  

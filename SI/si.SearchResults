@@ -1,6 +1,7 @@
----- USART_FLAG_RXNE Matches (5 in 2 files) ----
-Stm32f4xx_usart.c (e:\fm-base\stdperiph_driver_lib\stm32f4xx_stdperiph_driver\src):      (#) USART_FLAG_RXNE : to indicate the status of the receive buffer register
-Stm32f4xx_usart.c (e:\fm-base\stdperiph_driver_lib\stm32f4xx_stdperiph_driver\src):  *            @arg USART_FLAG_RXNE: Receive data register not empty flag
-Stm32f4xx_usart.c (e:\fm-base\stdperiph_driver_lib\stm32f4xx_stdperiph_driver\src):  *            @arg USART_FLAG_RXNE: Receive data register not empty flag.
-Stm32f4xx_usart.h (e:\fm-base\stdperiph_driver_lib\stm32f4xx_stdperiph_driver\inc):#define USART_FLAG_RXNE                      ((uint16_t)0x0020)
-Stm32f4xx_usart.h (e:\fm-base\stdperiph_driver_lib\stm32f4xx_stdperiph_driver\inc):                             ((FLAG) == USART_FLAG_TC) || ((FLAG) == USART_FLAG_RXNE) || \
+---- s_at_ack_timeout_flag Matches (6 in 1 files) ----
+Socket.c (e:\fm-base\src\lib\rtcm):static BOOL s_at_ack_timeout_flag = FALSE; 
+Socket.c (e:\fm-base\src\lib\rtcm):				s_at_ack_timeout_flag = TRUE;
+Socket.c (e:\fm-base\src\lib\rtcm):		if(s_at_ack_timeout_flag)//timeout
+Socket.c (e:\fm-base\src\lib\rtcm):	s_at_ack_timeout_flag = FALSE;
+Socket.c (e:\fm-base\src\lib\rtcm):		if(s_at_ack_timeout_flag)
+Socket.c (e:\fm-base\src\lib\rtcm):			s_at_ack_timeout_flag = FALSE;

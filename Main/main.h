@@ -75,7 +75,7 @@
 void start_task(void *pdata);			//任务函数
 
 //led task
-#define LED_TASK_PRIO                 18 //设置任务优先级
+#define LED_TASK_PRIO                 7 //设置任务优先级
 #define LED_STK_SIZE                  64  //设置任务堆栈大小
 void led_task(void *pdata);				//任务函数
 

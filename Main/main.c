@@ -135,8 +135,9 @@ void led_task(void *pdata)
 	while(1)
 	{
 		OSTimeDlyHMSM(0,0,1,0);
+		wifi_tick_time();
 		LED_Out(POW_GPIO1,ON_OFF);
-		UART_SendString(ESP_PER,"AT\r\n");
+		//UART_SendString(ESP_PER,"AT\r\n");
 		//dt=micros();
 		//Get_Raw_Date();
 		//printf("get_time=%d\r\n",dt);
@@ -194,11 +195,15 @@ void rtk_date_task(void *pdata)
 void esp_date_task(void *pdata)
 {
 	INT8U err;
+	wifi_reg();
+	LED_Out(POW_GPIO2,ON_OFF);
 	while(1)
 	{
 		OSSemPend(ESP_DATE_Semp,0,&err);
 		if(esp_mesg.esp__date_flag==1)
 		{
+			wifi_soc_send(0,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
+		//	USARTx_SendBytes(SOUCE_PER,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
 			Clean_ESP_date();
 		}
 	}
