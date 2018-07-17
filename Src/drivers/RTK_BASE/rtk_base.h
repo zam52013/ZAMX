@@ -55,28 +55,28 @@
 	 
 	 #ifdef NOWALT
 	 /* MSM4*/
-	 #define RKT_REF_DESCRIP "log com2 rtcm1006 ontime 10"
-	 #define RKT_ANT_DESCRIP "log com2 rtcm1033 ontime 10"
-	 #define RKT_CABLE_GPS "log com2 rtcm1074 ontime 1"
-	 #define RKT_CABLE_GLONASS "log com2 rtcm1084 ontime 1"
-	 #define RKT_CABLE_GALI "log com2 rtcm1094 ontime 1"
-	 #define RKT_CABLE_QZSS "log com2 rtcm1114 ontime 1"
-	 #define RKT_CABLE_BDS "log com2 rtcm1124 ontime 1"
-	 #define RTK_SERIA_CONFIG "serialconfig com2 115200 n 8 1 n on"
-	 #define RTK_RTCM_CONFIG_ON "interfacemode com2 none rtcmv3"
-	 //#define RTK_POSITION_CONFIG "fix position 51.1136 -114.0435 1059.4"
-	 #define RTK_ULOG	"unlogall"
+	 #define RTK_REF_DESCRIP "log com2 rtcm1006 ontime 10\r\n"
+	 #define RTK_ANT_DESCRIP "log com2 rtcm1033 ontime 10\r\n"
+	 #define RTK_CABLE_GPS "log com2 rtcm1074 ontime 1\r\n"
+	 #define RTK_CABLE_GLONASS "log com2 rtcm1084 ontime 1\r\n"
+	 #define RTK_CABLE_GALI "log com2 rtcm1094 ontime 1\r\n"
+	 #define RTK_CABLE_QZSS "log com2 rtcm1114 ontime 1\r\n"
+	 #define RTK_CABLE_BDS "log com2 rtcm1124 ontime 1\r\n"
+	 #define RTK_SERIA_CONFIG "serialconfig com2 115200 n 8 1 n on\r\n"
+	 #define RTK_RTCM_CONFIG_ON "interfacemode com2 none rtcmv3\r\n"
+	 //#define RTK_POSITION_CONFIG "fix position 51.1136 -114.0435 1059.4\r\n"
+	 #define RTK_ULOG	"unlogall\r\n"
 	 
 	 #else
-	 
-	 #define RKT_REF_DESCRIP "$PASHS,RT3,1006,B,10"
-	 #define RKT_ANT_DESCRIP "$PASHS,RT3,1033,B,10"
-	 #define RKT_CABLE_GPS "$PASHS,RT3,1074,B,1"
-	 #define RKT_CABLE_GLONASS "$PASHS,RT3,1084,B,1"
-	  #define RKT_CABLE_GALI "$PASHS,RT3,1094,B,1"
-		#define RKT_CABLE_QZSS "$PASHS,RT3,1114,B,1"
-	 #define RKT_CABLE_BDS "$PASHS,RT3,1124,B,1"
-	 //#define RTK_POSITION_CONFIG "$PASHS,POS,5542.00,N,3737.54,E,205.15"
+	 #define RTK_SNS_CMD "$PASHS,SNS,SOL\r\n"
+	 #define RTK_REF_DESCRIP "$PASHS,RT3,1006,B,10\r\n"
+	 #define RTK_ANT_DESCRIP "$PASHS,RT3,1033,B,10\r\n"
+	 #define RTK_CABLE_GPS "$PASHS,RT3,1074,B,1\r\n"
+	 #define RTK_CABLE_GLONASS "$PASHS,RT3,1084,B,1\r\n"
+	  #define RTK_CABLE_GALI "$PASHS,RT3,1094,B,1\r\n"
+	#define RTK_CABLE_QZSS "$PASHS,RT3,1114,B,1\r\n"
+	 #define RTK_CABLE_BDS "$PASHS,RT3,1124,B,1\r\n"
+	 //#define RTK_POSITION_CONFIG "$PASHS,POS,5542.00,N,3737.54,E,205.15\r\n"
 	 
 	 
 	 #endif

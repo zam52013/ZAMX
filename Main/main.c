@@ -59,6 +59,7 @@ __ALIGN_BEGIN USB_OTG_CORE_HANDLE    USB_OTG_dev __ALIGN_END ;
 
 /*******************task stk set*************************/
 OS_STK START_TASK_STK[START_STK_SIZE];			/*create task*/
+OS_STK TICKIT_TASK_STK[TICKIT_STK_SIZE];			/*tickit task*/
 OS_STK LED_TASK_STK[LED_STK_SIZE];				/*LED task*/
 OS_STK KEY_TASK_STK[KEY_STK_SIZE];				/*KEY task*/
 OS_STK OEM_RTCM_TASK_STK[OEM_RTCM_STK_SIZE];				/*OEM RTCM task*/
@@ -113,6 +114,7 @@ void start_task(void *pdata)
   pdata = pdata;
   OS_ENTER_CRITICAL();            //进入临界区(无法被中断打断)
 
+	OSTaskCreate(tickit_task, (void *)0, (OS_STK*)&TICKIT_TASK_STK[TICKIT_STK_SIZE - 1], TICKIT_TASK_PRIO);
 	OSTaskCreate(led_task, (void *)0, (OS_STK*)&LED_TASK_STK[LED_STK_SIZE - 1], LED_TASK_PRIO);
 	OSTaskCreate(key_task, (void *)0, (OS_STK*)&KEY_TASK_STK[KEY_STK_SIZE - 1], KEY_TASK_PRIO);
 	OSTaskCreate(oem_rtcm_task, (void *)0, (OS_STK*)&OEM_RTCM_TASK_STK[OEM_RTCM_STK_SIZE - 1], OEM_RTCM_TASK_PRIO);
@@ -127,6 +129,15 @@ void start_task(void *pdata)
   OS_EXIT_CRITICAL();             //退出临界区(可以被中断打断)
 }
 
+void tickit_task(void *pdata)
+{
+		while(1)
+		{
+			OSTimeDlyHMSM(0,0,1,0);
+			wifi_tick_time();
+		}
+}
+
 uint8_t buff[18]="OK-ZAM-HELLO-FEIMA";
 void led_task(void *pdata)
 {
@@ -135,8 +146,8 @@ void led_task(void *pdata)
 	while(1)
 	{
 		OSTimeDlyHMSM(0,0,1,0);
-		wifi_tick_time();
 		LED_Out(POW_GPIO1,ON_OFF);
+		//wifi_soc_send(0,"ok send date",12);
 		//UART_SendString(ESP_PER,"AT\r\n");
 		//dt=micros();
 		//Get_Raw_Date();
@@ -195,15 +206,21 @@ void rtk_date_task(void *pdata)
 void esp_date_task(void *pdata)
 {
 	INT8U err;
-	wifi_reg();
+	static unsigned char wifi_chan=0;
+	while(wifi_reg());
 	LED_Out(POW_GPIO2,ON_OFF);
 	while(1)
 	{
 		OSSemPend(ESP_DATE_Semp,0,&err);
 		if(esp_mesg.esp__date_flag==1)
 		{
-			wifi_soc_send(0,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
-		//	USARTx_SendBytes(SOUCE_PER,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
+			for(wifi_chan=0;wifi_chan<WIF_CHAN_CNT;wifi_chan++)
+			{
+				if(WIFI_CHAN_ON_FLAG[wifi_chan]==1)
+				{
+					wifi_soc_send(wifi_chan,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
+				}
+			}
 			Clean_ESP_date();
 		}
 	}

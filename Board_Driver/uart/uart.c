@@ -200,7 +200,7 @@ void USARTx_DeInit(USART_Driver* USARTx)
 void USARTx_SendByte(USART_Driver* USARTx, uint8_t byte)
 {
 	USART_SendData(USARTx->USART, byte);
-  while (USART_GetFlagStatus(USARTx->USART, USART_FLAG_TC) == RESET);
+  	while (USART_GetFlagStatus(USARTx->USART, USART_FLAG_TXE) == RESET);
 }
 
 void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint16_t length)
@@ -217,10 +217,10 @@ void USARTx_SendBytes(USART_Driver* USARTx, uint8_t* buffer, uint16_t length)
 
 void UART_SendString(USART_Driver* USARTx,char* s)
 {
-	while(*s)//¼ì²â×Ö·û´®½áÊø·û
+	while(*s !='\0')//¼ì²â×Ö·û´®½áÊø·û
 	{
-		while(USART_GetFlagStatus(USARTx->USART, USART_FLAG_TC)==RESET); 
 		USART_SendData(USARTx->USART ,*s);//·¢ËÍµ±Ç°×Ö·û
+		while(USART_GetFlagStatus(USARTx->USART, USART_FLAG_TXE)==RESET); 
 		s++;
 	}
 }

@@ -1,7 +1,5 @@
----- s_at_ack_timeout_flag Matches (6 in 1 files) ----
-Socket.c (e:\fm-base\src\lib\rtcm):static BOOL s_at_ack_timeout_flag = FALSE; 
-Socket.c (e:\fm-base\src\lib\rtcm):				s_at_ack_timeout_flag = TRUE;
-Socket.c (e:\fm-base\src\lib\rtcm):		if(s_at_ack_timeout_flag)//timeout
-Socket.c (e:\fm-base\src\lib\rtcm):	s_at_ack_timeout_flag = FALSE;
-Socket.c (e:\fm-base\src\lib\rtcm):		if(s_at_ack_timeout_flag)
-Socket.c (e:\fm-base\src\lib\rtcm):			s_at_ack_timeout_flag = FALSE;
+---- WIFI_DATE_FLAG Matches (4 in 1 files) ----
+Esp32.c (e:\fm-base\src\drivers\wifi): static unsigned char WIFI_DATE_FLAG=0;
+Esp32.c (e:\fm-base\src\drivers\wifi):			WIFI_DATE_FLAG=1;
+Esp32.c (e:\fm-base\src\drivers\wifi):		if(WIFI_DATE_FLAG==1)
+Esp32.c (e:\fm-base\src\drivers\wifi):				WIFI_DATE_FLAG=0;

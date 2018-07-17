@@ -46,6 +46,7 @@
 #endif
 	 
 	 #define ESP_BUFF_LEN 1024
+	  #define WIF_CHAN_CNT 4
 	 
 	 #define CMD_TEST "AT\r\n"
 	 #define CMD_CLOSE_SR "ATE0\r\n"
@@ -58,8 +59,9 @@
 	 
 	 typedef struct
 	 {
-			uint8_t esp__date_flag;
 			uint16_t esp_date_lenth;
+			uint8_t esp__date_flag;
+			uint8_t esp__chan;
 			uint8_t esp_date_buff[ESP_BUFF_LEN];
 	 }ESP_MESG;
 	 
@@ -67,7 +69,9 @@
 	extern OS_EVENT *ESP_DATE_Semp;
 	#endif
 	 extern ESP_MESG esp_mesg;
-	 
+
+	extern unsigned char WIFI_CHAN_ON_FLAG[WIF_CHAN_CNT];
+	
 	 void Wifi_Esp_Init(void);
 	 void Clean_ESP_date(void);
 	void wifi_tick_time();

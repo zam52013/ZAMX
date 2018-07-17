@@ -41,6 +41,9 @@
  #include "stm32f4xx.h"
  #include "board_defconfig.h"
  
+ #define Debug
+ #define DEBUG printf
+ 
 typedef void (*RCC_AXXPeriphClockCmd)(uint32_t RCC_AXXPeriph, FunctionalState NewState);
  
  typedef struct UART_DRIVER
@@ -335,7 +338,7 @@ static int8_t g_usart4rxfifo[CONFIG_UART4_DMA_RXBUFSIZE];
 		.NVIC_IRQChannelCmd=ENABLE 
 	},
 	
- 	.NVIC_FLAG=USART_IT_RXNE,USART_IT_IDLE,0,0,
+ 	.NVIC_FLAG=USART_IT_RXNE,0,0,0,
  	
  	#ifdef CONFIG_UART4_DMA
 	.USE_DMA=1,
