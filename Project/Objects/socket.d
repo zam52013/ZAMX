@@ -80,4 +80,5 @@
 .\objects\socket.o: ..\Src\drivers\RTK_BASE\rtk_base.h
 .\objects\socket.o: ..\Src\drivers\Wifi\esp32.h
 .\objects\socket.o: ..\Src\drivers\Radio\radio.h
+.\objects\socket.o: ..\Src\drivers\SIM7600\sim7600.h
 .\objects\socket.o: ..\Src\lib\CRC\crc24.h

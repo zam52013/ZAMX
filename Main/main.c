@@ -36,6 +36,7 @@
   
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <string.h>
 
 
 /** @defgroup APP_VCP_Private_Variables
@@ -65,6 +66,7 @@ OS_STK KEY_TASK_STK[KEY_STK_SIZE];				/*KEY task*/
 OS_STK OEM_RTCM_TASK_STK[OEM_RTCM_STK_SIZE];				/*OEM RTCM task*/
 OS_STK RTK_DATE_TASK_STK[RTK_DATE_STK_SIZE];				/*RTK DATE task*/
 OS_STK ESP_DATE_TASK_STK[ESP_DATE_STK_SIZE];				/*ESP DATE task*/
+OS_STK RTCM_TASK_STK[RTCM_STK_SIZE];						/*RTCM DATE task*/
 /*****************************************************/
 
 int main(void)
@@ -93,8 +95,8 @@ int main(void)
 	fm25v_init();
 	MPU9250_Init();
 	Key_Init();
-	RTK_BASE_Init();
-	Wifi_Esp_Init();
+	//RTK_BASE_Init();
+	
 /***********OS setup****************/
 	OSInit(); 
 	OSTaskCreate(start_task,(void *)0,(OS_STK *)&START_TASK_STK[START_STK_SIZE-1],START_TASK_PRIO );//创建起始任务
@@ -120,22 +122,28 @@ void start_task(void *pdata)
 	OSTaskCreate(oem_rtcm_task, (void *)0, (OS_STK*)&OEM_RTCM_TASK_STK[OEM_RTCM_STK_SIZE - 1], OEM_RTCM_TASK_PRIO);
 	OSTaskCreate(rtk_date_task, (void *)0, (OS_STK*)&RTK_DATE_TASK_STK[RTK_DATE_STK_SIZE - 1], RTK_DATE_TASK_PRIO);
 	OSTaskCreate(esp_date_task, (void *)0, (OS_STK*)&ESP_DATE_TASK_STK[ESP_DATE_STK_SIZE - 1], ESP_DATE_TASK_PRIO);
+	OSTaskCreate(rtcm_task, (void *)0, (OS_STK*)&RTCM_TASK_STK[RTCM_STK_SIZE - 1], RTCM_TASK_PRIO);
 	
 	OEM_RTCM_Semp=OSSemCreate(0);
 	RTK_DATE_Semp=OSSemCreate(0);
 	ESP_DATE_Semp=OSSemCreate(0);
-	
+
+	OSTaskSuspend(RTCM_TASK_PRIO); //挂起起始任务.
 	OSTaskSuspend(START_TASK_PRIO); //挂起起始任务.
   OS_EXIT_CRITICAL();             //退出临界区(可以被中断打断)
 }
 
 void tickit_task(void *pdata)
 {
-		while(1)
-		{
-			OSTimeDlyHMSM(0,0,1,0);
-			wifi_tick_time();
-		}
+	while(1)
+	{
+		OSTimeDlyHMSM(0,0,1,0);
+		wifi_tick_time();
+		RTK_tick_time();
+		
+		timer_tick(1);
+		restart_connect();	
+	}
 }
 
 uint8_t buff[18]="OK-ZAM-HELLO-FEIMA";
@@ -175,30 +183,34 @@ void oem_rtcm_task(void *pdata)
 		OSSemPend(OEM_RTCM_Semp,0,&err);
 		for(rtcm_cnt=0;rtcm_cnt<7;rtcm_cnt++)
 		{
-				if(rtcm_msg[rtcm_cnt].rtcm_flag==1)
+			if(rtcm_msg[rtcm_cnt].rtcm_flag==1)
+			{
+				crc_value_rtcm=CRC_Octets(&rtcm_msg[rtcm_cnt].head,(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+3);
+				if(crc_value_rtcm==((rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l]<<16)+
+				(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+1]<<8)+
+				(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+2])))
 				{
-					crc_value_rtcm=CRC_Octets(&rtcm_msg[rtcm_cnt].head,(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+3);
-					if(crc_value_rtcm==((rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l]<<16)+
-					(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+1]<<8)+
-					(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+2])))
-					{
-						USARTx_SendBytes(RTK_RTCM,&rtcm_msg[rtcm_cnt].head,rtcm_msg[rtcm_cnt].lenth_h*256+rtcm_msg[rtcm_cnt].lenth_l+6);
-					}
-					rtcm_msg[rtcm_cnt].rtcm_flag=0;
+					USARTx_SendBytes(RTK_RTCM,&rtcm_msg[rtcm_cnt].head,rtcm_msg[rtcm_cnt].lenth_h*256+rtcm_msg[rtcm_cnt].lenth_l+6);
 				}
+				rtcm_msg[rtcm_cnt].rtcm_flag=0;
+			}
 		}
 	}
 }
 void rtk_date_task(void *pdata)
 {
 	INT8U err;
+	RTK_BASE_Init();
+	OSTimeDlyHMSM(0,0,2,0);//wait 2s
+	while(OEM_Init_output());
 	while(1)
 	{
 		OSSemPend(RTK_DATE_Semp,0,&err);
 		if(rtk_date_mesg.rtk_date_flag==1)
 		{
-			USARTx_SendBytes(RTK_DAT,&rtk_date_mesg.rtcm_buff[0],rtk_date_mesg.rtk_date_lenth);
-			rtk_date_mesg.rtk_date_flag=0;
+			wifi_soc_send(0,&rtk_date_mesg.rtcm_buff[0],rtk_date_mesg.rtk_date_lenth);
+			//USARTx_SendBytes(RTK_DAT,&rtk_date_mesg.rtcm_buff[0],rtk_date_mesg.rtk_date_lenth);
+			memset(&rtk_date_mesg.rtk_date_flag,0,sizeof(RTK_DATE_MESG));
 		}
 	}
 }
@@ -207,6 +219,7 @@ void esp_date_task(void *pdata)
 {
 	INT8U err;
 	static unsigned char wifi_chan=0;
+	Wifi_Esp_Init();
 	while(wifi_reg());
 	LED_Out(POW_GPIO2,ON_OFF);
 	while(1)
@@ -218,12 +231,34 @@ void esp_date_task(void *pdata)
 			{
 				if(WIFI_CHAN_ON_FLAG[wifi_chan]==1)
 				{
-					wifi_soc_send(wifi_chan,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
+					if(strstr(&esp_mesg.esp_date_buff[0],"rtkconfig") != NULL)
+					{
+						OEM_RTK_BASE();
+					}
+					USARTx_SendBytes(RTK_DAT,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
+					//wifi_soc_send(wifi_chan,&esp_mesg.esp_date_buff[0],esp_mesg.esp_date_lenth);
 				}
 			}
 			Clean_ESP_date();
 		}
 	}
+}
+
+void rtcm_task(void *pdata) 
+{
+	static uint32_t qxwz_tick_cnt = 0;
+	static int curretnTime = 0;
+	qxwz_soc_close(0);
+	qxwz_soc_close(1);
+  while(1) 
+	{
+			OSTimeDlyHMSM(0,0,1,0);//wait 1s每隔一秒模拟宿主触发一次tick
+	   	curretnTime += 1000;
+			qxwz_tick_cnt++;
+			async_notify();
+    	qxwz_tick(curretnTime);
+		//get_qxwz_sdk_account_info();
+  }
 }
 	/**
   * @

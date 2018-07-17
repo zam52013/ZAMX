@@ -46,7 +46,7 @@
 #endif
 	 
 	 #define ESP_BUFF_LEN 1024
-	  #define WIF_CHAN_CNT 4
+	 #define WIF_CHAN_CNT 4
 	 
 	 #define CMD_TEST "AT\r\n"
 	 #define CMD_CLOSE_SR "ATE0\r\n"

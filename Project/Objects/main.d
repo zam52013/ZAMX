@@ -76,4 +76,9 @@
 .\objects\main.o: ..\Src\drivers\RTK_BASE\rtk_base.h
 .\objects\main.o: ..\Src\drivers\Wifi\esp32.h
 .\objects\main.o: ..\Src\drivers\Radio\radio.h
+.\objects\main.o: ..\Src\drivers\SIM7600\sim7600.h
 .\objects\main.o: ..\Src\lib\CRC\crc24.h
+.\objects\main.o: ..\Src\lib\RTCM\qxwz_rtcm.h
+.\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
+.\objects\main.o: ..\Src\lib\RTCM\socket.h
+.\objects\main.o: ..\Src\lib\RTCM\prefs.h

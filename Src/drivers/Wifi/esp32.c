@@ -346,9 +346,16 @@ unsigned char wifi_reg(void)
 
 unsigned int wifi_soc_send(unsigned char soc,uint8_t *send_buffer,unsigned int length)
 {
-	char send_buff[1024];
+	char send_buff[2048];
 	char connet_buff[30];
 	memset(send_buff,0,sizeof(send_buff));
+	if(length>=2048)
+	{
+		#ifdef Debug
+		DEBUG("over send lenth!\r\n");
+		#endif
+		return 1;
+	}
 	sprintf(connet_buff,"AT+CIPSEND=%d,%d\r\n",soc,length);
 	if(wifi_send_comd(connet_buff,">",2)!=0)
 	{

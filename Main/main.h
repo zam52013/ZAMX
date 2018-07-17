@@ -62,10 +62,14 @@
 #include "rtk_base.h"
 #include "esp32.h"
 #include "radio.h"
+#include "sim7600.h"
 /***********************************************/
 
 /******************lib**************************/
 #include "crc24.h"
+#include "qxwz_rtcm.h"
+#include "socket.h"
+#include "prefs.h"
 /***********************************************/
 
 /****************UCOSII TASK*************************/
@@ -91,18 +95,23 @@ void led_task(void *pdata);				//任务函数
 
 //OEM get rtcm task
 #define OEM_RTCM_TASK_PRIO                 8 //设置任务优先级
-#define OEM_RTCM_STK_SIZE                  2048  //设置任务堆栈大小
+#define OEM_RTCM_STK_SIZE                  5120  //设置任务堆栈大小
 void oem_rtcm_task(void *pdata);				//任务函数
 
 //OEM get date task
 #define RTK_DATE_TASK_PRIO                 9 //设置任务优先级
-#define RTK_DATE_STK_SIZE                  2048  //设置任务堆栈大小
+#define RTK_DATE_STK_SIZE                  4096  //设置任务堆栈大小
 void rtk_date_task(void *pdata);				//任务函数
 
 //ESP get date task
 #define ESP_DATE_TASK_PRIO                 10 //设置任务优先级
-#define ESP_DATE_STK_SIZE                  2048  //设置任务堆栈大小
+#define ESP_DATE_STK_SIZE                  4096  //设置任务堆栈大小
 void esp_date_task(void *pdata);				//任务函数
+
+//RTCM任务  该任务优先级应该低
+#define RTCM_TASK_PRIO                  12//设置任务优先级
+#define RTCM_STK_SIZE                   2048//设置任务堆栈大小
+void rtcm_task(void *pdata);//任务函数
 /***************************************************/
 
 

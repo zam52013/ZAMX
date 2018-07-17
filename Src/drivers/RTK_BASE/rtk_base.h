@@ -47,11 +47,11 @@
 #endif 
 	 
 	 
-	#define RTCM_BUFF_LEN 300
+	#define RTCM_BUFF_LEN 400
 	 #define RTCM_MESG_CNT 7
-	 #define RTK_BUFF_LEN 512
+	 #define RTK_BUFF_LEN 2048
 	 
-	 #define NOWALT
+	 //#define NOWALT
 	 
 	 #ifdef NOWALT
 	 /* MSM4*/
@@ -69,13 +69,16 @@
 	 
 	 #else
 	 #define RTK_SNS_CMD "$PASHS,SNS,SOL\r\n"
-	 #define RTK_REF_DESCRIP "$PASHS,RT3,1006,B,10\r\n"
-	 #define RTK_ANT_DESCRIP "$PASHS,RT3,1033,B,10\r\n"
-	 #define RTK_CABLE_GPS "$PASHS,RT3,1074,B,1\r\n"
-	 #define RTK_CABLE_GLONASS "$PASHS,RT3,1084,B,1\r\n"
-	  #define RTK_CABLE_GALI "$PASHS,RT3,1094,B,1\r\n"
-	#define RTK_CABLE_QZSS "$PASHS,RT3,1114,B,1\r\n"
-	 #define RTK_CABLE_BDS "$PASHS,RT3,1124,B,1\r\n"
+	 #define RTK_REF_DESCRIP "$PASHS,RT3,1006,B,ON,10\r\n"
+	 #define RTK_ANT_DESCRIP "$PASHS,RT3,1033,B,ON,10\r\n"
+	 #define RTK_CABLE_GPS "$PASHS,RT3,1074,B,ON,1\r\n"
+	 #define RTK_CABLE_GLONASS "$PASHS,RT3,1084,B,ON,1\r\n"
+	  #define RTK_CABLE_GALI "$PASHS,RT3,1094,B,ON,1\r\n"
+	#define RTK_CABLE_QZSS "$PASHS,RT3,1114,B,ON,1\r\n"
+	 #define RTK_CABLE_BDS "$PASHS,RT3,1124,B,ON,1\r\n"
+	 #define RTK_OUT_GGA "$PASHS,NME,GGA,A,ON,1\r\n"
+	 #define RTK_OUT_A_OFF "$PASHS,NME,ALL,A,OFF\r\n"
+	 #define RTK_OUT_B_OFF "$PASHS,RT3,ALL,B,OFF\r\n"
 	 //#define RTK_POSITION_CONFIG "$PASHS,POS,5542.00,N,3737.54,E,205.15\r\n"
 	 
 	 
@@ -141,8 +144,12 @@ typedef struct
 
 	 extern RTCM_MESG rtcm_msg[RTCM_MESG_CNT];
 	extern RTK_DATE_MESG rtk_date_mesg;
+	
+	void	RTK_tick_time(void);
 	 void RTK_BASE_Init(void);
-	 
+	 unsigned char OEM_Init_output(void);
+	 unsigned char OEM_RTK_BASE(void);
+
 		#ifdef __cplusplus
 	}
 #endif

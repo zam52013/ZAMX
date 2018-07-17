@@ -43,7 +43,11 @@
 	#include "board.h" 
  
 	 void Sim7600_Init(void);
-	  
+
+	  	extern void timer_tick(uint16_t tick_feq);
+		extern void restart_connect(void);
+		extern void async_notify(void);
+		
 	#ifdef __cplusplus
 	}
 #endif

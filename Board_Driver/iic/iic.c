@@ -37,10 +37,6 @@
  /* Includes ------------------------------------------------------------------*/
 #include "iic.h"
 
-__IO uint16_t  sEEAddress = 0;    
-__IO uint16_t* sEEDataReadPointer;   
-__IO uint8_t*  sEEDataWritePointer;  
-__IO uint8_t   sEEDataNum;
 
 void IICx_Init(IIC_Driver* IICx)
 {
@@ -93,156 +89,184 @@ void IICx_Init(IIC_Driver* IICx)
 	I2C_Init(IICx->IIC,&IICx->I2C_Init_Def);
 	
 }
+void IIC_DMA_Config(IIC_Driver* IICx,uint32_t pBuffer, uint32_t BufferSize, uint32_t Direction)
+{
+	DMA_InitTypeDef DMA_InitStructure;
+	if (Direction == 0)
+	{
+		DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)pBuffer;
+   	 	DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;    
+    		DMA_InitStructure.DMA_BufferSize = (uint32_t)BufferSize;  
+    		DMA_Init(IICx->I2C_DMA_TX, &DMA_InitStructure);  
+	}
+	else
+	{
+		DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)pBuffer;
+   	 	DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;    
+    		DMA_InitStructure.DMA_BufferSize = (uint32_t)BufferSize;  
+    		DMA_Init(IICx->I2C_DMA_RX, &DMA_InitStructure);  
+	}
+}
+uint16_t Read_Point_num=0;
+uint32_t IICX_Read_Buffer(IIC_Driver* IICx,uint8_t Address,uint8_t ReadAddr,uint8_t* pBuffer,uint16_t Numbyte)
+{
+	uint32_t IIC_Out_Time;
+	Read_Point_num=Numbyte;
+	IIC_Out_Time=0xfff00;
+	while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_BUSY))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	 I2C_GenerateSTART(IICx->IIC, ENABLE);
+	IIC_Out_Time=0xfff00;
+	while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	I2C_Send7bitAddress(IICx->IIC, Address, I2C_Direction_Transmitter);
+	IIC_Out_Time=0xfff00;
+	while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	 I2C_SendData(IICx->IIC, ReadAddr);
+	 IIC_Out_Time=0xfff00;
+	 while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_BTF) == RESET)
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	 I2C_GenerateSTART(IICx->IIC, ENABLE);
+	 IIC_Out_Time=0xfff00;
+	 while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	  I2C_Send7bitAddress(IICx->IIC, Address, I2C_Direction_Receiver); 
+	  if(Numbyte<2)
+	 {
+		IIC_Out_Time=0xfff00;
+	 	while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_ADDR) == RESET)
+		{
+			if((IIC_Out_Time--)==0)
+				return 1;
+		}
+		I2C_AcknowledgeConfig(IICx->IIC, DISABLE); 
+		(void)(IICx->IIC->SR2);
+		I2C_GenerateSTOP(IICx->IIC, ENABLE);
+		IIC_Out_Time=0xfff00;
+	 	while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_RXNE) == RESET)
+		{
+			if((IIC_Out_Time--)==0)
+				return 1;
+		}
+		*pBuffer =I2C_ReceiveData(IICx->IIC);
+		Numbyte--;
+		IIC_Out_Time=0xfff00;
+	 	while(IICx->IIC->CR1 & I2C_CR1_STOP)
+		{
+			if((IIC_Out_Time--)==0)
+				return 1;
+		}
+		I2C_AcknowledgeConfig(IICx->IIC, ENABLE);
+	  }
+	  else
+	  {
+		IIC_Out_Time=0xfff00;
+	 	while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+		{
+			if((IIC_Out_Time--)==0)
+				return 1;
+		}
+	  }
+	  IIC_DMA_Config(IICx,(uint32_t)pBuffer, Numbyte,1);
+	  I2C_DMALastTransferCmd(IICx->IIC, ENABLE); 
+	  DMA_Cmd(IICx->I2C_DMA_RX, ENABLE);
+	  return 0;
+}
+uint16_t Write_Point_num=0;
+uint32_t IICX_Write_Buffer(IIC_Driver* IICx,uint8_t Address,uint8_t WriteAddr,uint8_t* pBuffer,uint16_t Numbyte)
+{
+	uint32_t IIC_Out_Time;
+	Write_Point_num=Numbyte;
+	IIC_Out_Time=0xfff00;
+	while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_BUSY))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	I2C_GenerateSTART(IICx->IIC, ENABLE);
+	IIC_Out_Time=0xfff00;
+	while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	 I2C_Send7bitAddress(IICx->IIC, Address, I2C_Direction_Transmitter);
+	 IIC_Out_Time=0xfff00;
+	while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	I2C_SendData(IICx->IIC, WriteAddr);
+	 IIC_Out_Time=0xfff00;
+	while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_BYTE_TRANSMITTING))
+	{
+		if((IIC_Out_Time--)==0)
+			return 1;
+	}
+	IIC_DMA_Config(IICx,(uint32_t)pBuffer, Numbyte,0);
+	 DMA_Cmd(IICx->I2C_DMA_TX, ENABLE);
+	 I2C_DMACmd(IICx->IIC, ENABLE);
+  	return 0;
+}
 
-///**
-//  * @brief  Reads a block of data from the EEPROM.
-//  * @param  pBuffer : pointer to the buffer that receives the data read from 
-//  *         the EEPROM.
-//  * @param  ReadAddr : EEPROM's internal address to start reading from.
-//  * @param  NumByteToRead : pointer to the variable holding number of bytes to 
-//  *         be read from the EEPROM.
-//  * 
-//  *        @note The variable pointed by NumByteToRead is reset to 0 when all the 
-//  *              data are read from the EEPROM. Application should monitor this 
-//  *              variable in order know when the transfer is complete.
-//  * 
-//  * @note When number of data to be read is higher than 1, this function just 
-//  *       configures the communication and enable the DMA channel to transfer data.
-//  *       Meanwhile, the user application may perform other tasks.
-//  *       When number of data to be read is 1, then the DMA is not used. The byte
-//  *       is read in polling mode.
-//  * 
-//  * @retval sEE_OK (0) if operation is correctly performed, else return value 
-//  *         different from sEE_OK (0) or the timeout user callback.
-//  */
-//uint32_t IIC_ReadBuffer(IIC_Driver* IICx,uint8_t* pBuffer, uint16_t ReadAddr, uint16_t NumByteToRead)
-//{  
-//  /* Set the pointer to the Number of data to be read. This pointer will be used 
-//      by the DMA Transfer Completer interrupt Handler in order to reset the 
-//      variable to 0. User should check on this variable in order to know if the 
-//      DMA transfer has been complete or not. */
-//      uint32_t sEETimeout;
-//  sEEDataReadPointer = NumByteToRead;
-//  
-//  /*!< While the bus is busy */
-//  sEETimeout = 0xfffff;
-//  while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_BUSY))
-//  {
-//    if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//  }
-//  
-//  /*!< Send START condition */
-//  I2C_GenerateSTART(IICx->IIC, ENABLE);
-//  
-//  /*!< Test on EV5 and clear it (cleared by reading SR1 then writing to DR) */
-//  sEETimeout = 0xfffff;
-//  while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_MODE_SELECT))
-//  {
-//    if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//  }
-//  
-//  /*!< Send EEPROM address for write */
-//  I2C_Send7bitAddress(IICx->IIC, sEEAddress, I2C_Direction_Transmitter);
+void DMA1_Stream6_IRQHandler(void)
+{
+	uint32_t IIC_Out_Time;
+	 /* Check if the DMA transfer is complete */
+ 	 if(DMA_GetFlagStatus(DMA1_Stream6, DMA_FLAG_TCIF6) != RESET)
+  	{  
+    	/* Disable the DMA Tx Stream and Clear TC flag */  
+    		DMA_Cmd(DMA1_Stream6, DISABLE);
+    		DMA_ClearFlag(DMA1_Stream6, DMA_FLAG_TCIF6);
 
-//  /*!< Test on EV6 and clear it */
-//  sEETimeout = 0xfffff;
-//  while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
-//  {
-//    if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//  } 
-//  
-//  /*!< Send the EEPROM's internal address to read from: Only one byte address */
-//  I2C_SendData(IICx->IIC, ReadAddr);  
-
-
-//  /*!< Test on EV8 and clear it */
-//  sEETimeout = 0xfffff;
-//  while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_BTF) == RESET)
-//  {
-//    if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//  }
-//  
-//  /*!< Send STRAT condition a second time */  
-//  I2C_GenerateSTART(IICx->IIC, ENABLE);
-//  
-//  /*!< Test on EV5 and clear it (cleared by reading SR1 then writing to DR) */
-//  sEETimeout = 0xfffff;
-//  while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_MODE_SELECT))
-//  {
-//    if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//  } 
-//  
-//  /*!< Send EEPROM address for read */
-//  I2C_Send7bitAddress(IICx->IIC, sEEAddress, I2C_Direction_Receiver);  
-//  
-//  /* If number of data to be read is 1, then DMA couldn't be used */
-//  /* One Byte Master Reception procedure (POLLING) ---------------------------*/
-//  if ((uint16_t)(*NumByteToRead) < 2)
-//  {
-//    /* Wait on ADDR flag to be set (ADDR is still not cleared at this level */
-//    sEETimeout = 0xfffff;
-//    while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_ADDR) == RESET)
-//    {
-//      if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//    }     
-//    
-//    /*!< Disable Acknowledgement */
-//    I2C_AcknowledgeConfig(IICx->IIC, DISABLE);   
-//    
-//    /* Clear ADDR register by reading SR1 then SR2 register (SR1 has already been read) */
-//    (void)IICx->IIC.SR2;
-//    
-//    /*!< Send STOP Condition */
-//    I2C_GenerateSTOP(IICx->IIC, ENABLE);
-//    
-//    /* Wait for the byte to be received */
-//    sEETimeout = 0xfffff;
-//    while(I2C_GetFlagStatus(IICx->IIC, I2C_FLAG_RXNE) == RESET)
-//    {
-//      if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//    }
-//    
-//    /*!< Read the byte received from the EEPROM */
-//    *pBuffer = I2C_ReceiveData(IICx->IIC);
-//    
-//    /*!< Decrement the read bytes counter */
-//    (uint16_t)(*NumByteToRead)--;        
-//    
-//    /* Wait to make sure that STOP control bit has been cleared */
-//    sEETimeout = 0xfffff;
-//    while(IICx->IIC.CR1 & I2C_CR1_STOP)
-//    {
-//      if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//    }  
-//    
-//    /*!< Re-Enable Acknowledgement to be ready for another reception */
-//    I2C_AcknowledgeConfig(IICx->IIC, ENABLE);    
-//  }
-//  else/* More than one Byte Master Reception procedure (DMA) -----------------*/
-//  {
-//    /*!< Test on EV6 and clear it */
-//    sEETimeout = 0xfffff;
-//    while(!I2C_CheckEvent(IICx->IIC, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
-//    {
-//      if((sEETimeout--) == 0) return sEE_TIMEOUT_UserCallback();
-//    }  
-//    
-//    /* Configure the DMA Rx Channel with the buffer address and the buffer size */
-//    sEE_LowLevel_DMAConfig((uint32_t)pBuffer, (uint16_t)(*NumByteToRead), sEE_DIRECTION_RX);
-//    
-//    /* Inform the DMA that the next End Of Transfer Signal will be the last one */
-//    I2C_DMALastTransferCmd(IICx->IIC, ENABLE); 
-//    
-//    /* Enable the DMA Rx Stream */
-//    DMA_Cmd(IICx->I2C_DMA_RX, ENABLE);    
-
-//    /* Enable the sEE_I2C peripheral DMA requests */
-//    I2C_DMACmd(IICx->IIC, ENABLE);      
-//  }
-//  
-//  /* If all operations OK, return sEE_OK (0) */
-//  return 0;
-//}
+    	/*!< Wait till all data have been physically transferred on the bus */
+   	 IIC_Out_Time =0xfff00 ;
+    	while(!I2C_GetFlagStatus(I2C1, I2C_FLAG_BTF))
+    	{
+      		if((IIC_Out_Time--)==0)
+			return ;
+    	}
+    
+    	/*!< Send STOP condition */
+    	I2C_GenerateSTOP(I2C1, ENABLE);
+    
+    	/* Reset the variable holding the number of data to be written */
+    	Write_Point_num = 0;  
+  }
+}
+void DMA1_Stream0_IRQHandler(void)
+{
+	 /* Check if the DMA transfer is complete */
+  	if(DMA_GetFlagStatus(DMA1_Stream0, DMA_FLAG_TCIF0) != RESET)
+  	{      
+   		 /*!< Send STOP Condition */
+   	 	I2C_GenerateSTOP(I2C1, ENABLE);    
+    
+   		 /* Disable the DMA Rx Stream and Clear TC Flag */  
+    		DMA_Cmd(DMA1_Stream0, DISABLE);
+    		DMA_ClearFlag(DMA1_Stream0, DMA_FLAG_TCIF0);
+    
+    		/* Reset the variable holding the number of data to be read */
+    		Read_Point_num = 0;
+  	}
+}
 
 	/**
   * @}

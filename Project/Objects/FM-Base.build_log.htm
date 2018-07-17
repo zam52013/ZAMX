@@ -22,12 +22,12 @@ Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
 E:\FM-Base\Project\FM-Base.uvprojx
-Project File Date:  07/11/2018
+Project File Date:  07/17/2018
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'FM-Base-V0'
-compiling esp32.c...
+compiling rtk_base.c...
 ..\Board_Driver\board_defconfig.h(151): warning:  #1-D: last line of file ends without a newline
    
 ..\Board_Driver\spi\spi.h(334): warning:  #1-D: last line of file ends without a newline
@@ -38,14 +38,16 @@ compiling esp32.c...
   /************************ (C) COPYRIGHT feima *****END OF FILE****/
 ..\Board_Driver\board.h(267): warning:  #1-D: last line of file ends without a newline
    
-..\Src\drivers\Wifi\esp32.h(77): warning:  #1295-D: Deprecated declaration wifi_tick_time - give arg types
-  	void wifi_tick_time();
-..\Src\drivers\Wifi\esp32.h(104): warning:  #1-D: last line of file ends without a newline
+..\Src\drivers\RTK_BASE\rtk_base.h(176): warning:  #1-D: last line of file ends without a newline
   /************************ (C) COPYRIGHT feima *****END OF FILE****/
-..\Src\drivers\Wifi\esp32.c: 7 warnings, 0 errors
+..\Src\drivers\RTK_BASE\rtk_base.c(372): warning:  #177-D: variable "statu"  was declared but never referenced
+  	 static uint8_t statu=0;
+..\Src\drivers\RTK_BASE\rtk_base.c(646): warning:  #1-D: last line of file ends without a newline
+  /************************ (C) COPYRIGHT feima *****END OF FILE****/
+..\Src\drivers\RTK_BASE\rtk_base.c: 8 warnings, 0 errors
 linking...
-Program Size: Code=29594 RO-data=1178 RW-data=15764 ZI-data=42676  
-".\Objects\FM-Base.axf" - 0 Error(s), 7 Warning(s).
+Program Size: Code=49318 RO-data=2538 RW-data=16000 ZI-data=83824  
+".\Objects\FM-Base.axf" - 0 Error(s), 8 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   .\RTE\_FM-Base-V0

@@ -39,7 +39,7 @@
 #include "mathlib.h"
 #include <math.h>
 
-
+#define RTK_CMD_CNT 100
 
  gpgga GPGGA;
  rtkposa RTKPOSA;
@@ -53,19 +53,180 @@
  OS_EVENT *OEM_RTCM_Semp;
  OS_EVENT *RTK_DATE_Semp;
  #endif 
- 
+
+  static unsigned char RTK_TIME_START_FLAG=0;
+ static unsigned char  RTK_TIME_OUT_FLAG=0;
+static unsigned char rtk_timecnt=0;
+static unsigned char rtk_wait_time=0;
+
+
+ static char rtk_cmd_comander[RTK_CMD_CNT];
+ static unsigned char RTK_CMD_FLAG=0;
+  static unsigned char rtk_cmd_date_lenth=0;
+
  void RTK_BASE_Init(void)
  {
-		unsigned char i=0;
-		UARTx_Init(RTK_DAT);
-		UARTx_Init(RTK_RTCM);
-		for(i=0;i<RTCM_MESG_CNT;i++)
+	unsigned char i=0;
+	UARTx_Init(RTK_DAT);
+	UARTx_Init(RTK_RTCM);
+	for(i=0;i<RTCM_MESG_CNT;i++)
 	 {
 		memset(&rtcm_msg[i].rtcm_flag,0,sizeof(RTCM_MESG));
 	 }
-		memset(&rtk_date_mesg.rtk_date_flag,0,sizeof(RTK_DATE_MESG));
+	memset(&rtk_date_mesg.rtk_date_flag,0,sizeof(RTK_DATE_MESG));
  }
- 
+
+
+void RTK_tick_time(void)
+{
+	if(RTK_TIME_START_FLAG)
+	{
+		if(rtk_timecnt>rtk_wait_time)
+		{
+			RTK_TIME_OUT_FLAG=1;
+		}
+		rtk_timecnt++;
+	}
+	else
+	{
+		rtk_timecnt=0;
+	}
+}
+ static unsigned char RTK_find_string(char *str)
+{
+	if(NULL == str)
+	{
+		return 0;
+	}
+  	if(strstr(&rtk_cmd_comander[0],str) != NULL)
+	  return 1;
+	else
+		return 0;
+ }
+
+ static unsigned char RTK_send_cmd(char *str,char *recive_str,unsigned char wait_time)
+ {
+ 	unsigned char ret=0;
+	if(str==NULL)
+	{
+		return 0;
+	}
+	if((recive_str==NULL )||(wait_time<=0))
+	{
+		return 0;
+	}
+	else
+	{
+		RTK_TIME_START_FLAG=1;
+		rtk_timecnt=0;
+		rtk_wait_time=wait_time;
+		RTK_TIME_OUT_FLAG=0;
+		RTK_CMD_FLAG=1;
+		rtk_cmd_date_lenth=0;
+	}
+	memset(&rtk_cmd_comander[0],0,RTK_CMD_CNT);
+	UART_SendString(RTK_DAT,str);
+	while(1)
+	{
+		if(RTK_find_string(recive_str))
+		{
+			ret=0;
+			break;
+		}
+		if(RTK_TIME_OUT_FLAG)
+		{
+			ret=1;
+			break;
+		}
+	}
+	memset(&rtk_cmd_comander[0],0,RTK_CMD_CNT);
+	RTK_TIME_START_FLAG=0;
+	RTK_TIME_OUT_FLAG=0;
+	RTK_CMD_FLAG=0;
+	return ret;
+
+ }
+  unsigned char OEM_Init_output(void)
+{
+	OSTimeDlyHMSM(0,0,4,0);//wait 3 s
+	#ifdef NOWALT
+	
+	#else
+	if(RTK_send_cmd(RTK_SNS_CMD,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK sns erro!\r\n");
+		#endif
+		return 1;
+	}
+	if(RTK_send_cmd(RTK_OUT_A_OFF,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK A out erro!\r\n");
+		#endif
+		return 1;
+	}
+	if(RTK_send_cmd(RTK_OUT_B_OFF,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK B out erro!\r\n");
+		#endif
+		return 1;
+	}
+	if(RTK_send_cmd(RTK_OUT_GGA,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK gga out erro!\r\n");
+		#endif
+		return 1;
+	}
+	#endif
+	return 0;
+	
+ }
+unsigned char OEM_RTK_BASE(void)
+{
+	#ifdef NOWALT
+	
+	#else
+	if(RTK_send_cmd(RTK_REF_DESCRIP,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK 1006 erro!\r\n");
+		#endif
+		return 1;
+	}
+	if(RTK_send_cmd(RTK_ANT_DESCRIP,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK 1033 erro!\r\n");
+		#endif
+		return 1;
+	}
+	if(RTK_send_cmd(RTK_CABLE_GPS,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK 1074 erro!\r\n");
+		#endif
+		return 1;
+	}
+	if(RTK_send_cmd(RTK_CABLE_GLONASS,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK 1084 erro!\r\n");
+		#endif
+		return 1;
+	}
+		if(RTK_send_cmd(RTK_CABLE_BDS,"ACK",2)!=0)
+	{
+		#ifdef Debug
+		DEBUG("RTK 1124 erro!\r\n");
+		#endif
+		return 1;
+	}
+	#endif
+	return 0;
+}
  void RTK_RTCM_IRTHandler(void)
  {
 		uint8_t res = 0;
@@ -75,7 +236,7 @@
 	 static uint8_t ID_MES=0;
 	 unsigned int msg_id;
 	 
-		#ifdef SYSTEM_SUPPORT_OS
+	#ifdef SYSTEM_SUPPORT_OS
 	OSIntEnter();
 	#endif
 	 if(USART_GetITStatus(RTK_RTCM_UART, USART_IT_RXNE) != RESET) 
@@ -204,7 +365,7 @@
 	OSIntExit();
 	#endif 
  }
- 
+
  void RTK_DAT_IRTHandler(void)
  {
 	 uint8_t res = 0;
@@ -216,54 +377,83 @@
 	 if(USART_GetITStatus(RTK_DAT_UART, USART_IT_RXNE)!=RESET)
 	 {
 			res =USART_ReceiveData(RTK_DAT_UART);
-			if(rtk_date_mesg.rtk_date_flag==0)
+			if(RTK_CMD_FLAG)
 			{
-				switch(statu)
+				rtk_cmd_comander[rtk_cmd_date_lenth]=res;
+				rtk_cmd_date_lenth++;
+				if(rtk_cmd_date_lenth>=RTK_CMD_CNT)
 				{
-					case 0:
-						memset(rtk_date_mesg.rtcm_buff,0,RTK_BUFF_LEN);
-						rtk_date_mesg.rtk_date_lenth=0;
-						statu=1;
-						rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
-						rtk_date_mesg.rtk_date_lenth++;
-						break;
-					case 1:
-						if(res==0x0d)
-						{
-							statu=2;
-							rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
-							rtk_date_mesg.rtk_date_lenth++;
-						}
-						else
-						{
-							rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
-							rtk_date_mesg.rtk_date_lenth++;
-						}
-						if(rtk_date_mesg.rtk_date_lenth>RTK_BUFF_LEN)
-						{
-							statu=0;
-						}
-						break;
-					case 2:
-						if(res==0x0a)
-						{
-							rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
-							rtk_date_mesg.rtk_date_lenth++;
-							statu=0;
-							rtk_date_mesg.rtk_date_flag=1;
-							OSSemPost(RTK_DATE_Semp);
-						}
-						else
-						{
-							statu=0;
-						}
-						break;
-						default:
-							break;
+					rtk_cmd_date_lenth=0;
 				}
+				
 			}
+			else
+			{
+				if(rtk_date_mesg.rtk_date_flag==0)
+				{
+					rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+					rtk_date_mesg.rtk_date_lenth++;
+					if(rtk_date_mesg.rtk_date_lenth>(RTK_BUFF_LEN-1))
+					{
+						rtk_date_mesg.rtk_date_lenth=RTK_BUFF_LEN-1;//预留一个位防止越界
+					}
+					/*switch(statu)
+					{
+						case 0:
+							memset(rtk_date_mesg.rtcm_buff,0,RTK_BUFF_LEN);
+							rtk_date_mesg.rtk_date_lenth=0;
+							statu=1;
+							rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+							rtk_date_mesg.rtk_date_lenth++;
+							break;
+						case 1:
+							if(res==0x0d)
+							{
+								statu=2;
+								rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+								rtk_date_mesg.rtk_date_lenth++;
+							}
+							else
+							{
+								rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+								rtk_date_mesg.rtk_date_lenth++;
+							}
+							if(rtk_date_mesg.rtk_date_lenth>RTK_BUFF_LEN)
+							{
+								statu=0;
+							}
+							break;
+						case 2:
+							if(res==0x0a)
+							{
+								rtk_date_mesg.rtcm_buff[rtk_date_mesg.rtk_date_lenth]=res;
+								rtk_date_mesg.rtk_date_lenth++;
+								statu=0;
+								rtk_date_mesg.rtk_date_flag=1;
+								OSSemPost(RTK_DATE_Semp);
+							}
+							else
+							{
+								statu=0;
+							}
+							break;
+							default:
+								break;
+					}*/
+			}
+				//else if(USART_GetITStatus(RTK_DAT_UART, USART_IT_IDLE)!=RESET)
+		}
 	 }
-	 
+	 else if(USART_GetFlagStatus(RTK_DAT_UART, USART_FLAG_IDLE)!=RESET)
+	{
+			RTK_DAT_UART->SR;
+			RTK_DAT_UART->DR;
+			if(!RTK_CMD_FLAG)
+			{
+				rtk_date_mesg.rtk_date_flag=1;
+				OSSemPost(RTK_DATE_Semp);
+			}
+	}
 	#ifdef SYSTEM_SUPPORT_OS
 	OSIntExit();
 	#endif 
