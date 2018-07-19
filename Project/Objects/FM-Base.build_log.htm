@@ -22,12 +22,12 @@ Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
 E:\FM-Base\Project\FM-Base.uvprojx
-Project File Date:  07/17/2018
+Project File Date:  07/18/2018
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'FM-Base-V0'
-compiling rtk_base.c...
+compiling main.c...
 ..\Board_Driver\board_defconfig.h(151): warning:  #1-D: last line of file ends without a newline
    
 ..\Board_Driver\spi\spi.h(334): warning:  #1-D: last line of file ends without a newline
@@ -38,23 +38,47 @@ compiling rtk_base.c...
   /************************ (C) COPYRIGHT feima *****END OF FILE****/
 ..\Board_Driver\board.h(267): warning:  #1-D: last line of file ends without a newline
    
-..\Src\drivers\RTK_BASE\rtk_base.h(176): warning:  #1-D: last line of file ends without a newline
+..\Src\drivers\KEY\key.h(81): warning:  #1-D: last line of file ends without a newline
+  	
+..\Src\drivers\MPU9250\mpu9250.h(206): warning:  #1-D: last line of file ends without a newline
+   
+..\Src\drivers\SOUNCE\souce.h(88): warning:  #1-D: last line of file ends without a newline
   /************************ (C) COPYRIGHT feima *****END OF FILE****/
-..\Src\drivers\RTK_BASE\rtk_base.c(372): warning:  #177-D: variable "statu"  was declared but never referenced
-  	 static uint8_t statu=0;
-..\Src\drivers\RTK_BASE\rtk_base.c(646): warning:  #1-D: last line of file ends without a newline
+..\Src\drivers\POW_CTR\pow_ctr.h(79): warning:  #1-D: last line of file ends without a newline
+   
+..\Src\drivers\LED\led.h(73): warning:  #1-D: last line of file ends without a newline
+   
+..\Src\drivers\RTK_BASE\rtk_base.h(177): warning:  #1-D: last line of file ends without a newline
   /************************ (C) COPYRIGHT feima *****END OF FILE****/
-..\Src\drivers\RTK_BASE\rtk_base.c: 8 warnings, 0 errors
+..\Src\drivers\Wifi\esp32.h(78): warning:  #1295-D: Deprecated declaration wifi_tick_time - give arg types
+  	void wifi_tick_time();
+..\Src\drivers\Wifi\esp32.h(105): warning:  #1-D: last line of file ends without a newline
+  /************************ (C) COPYRIGHT feima *****END OF FILE****/
+..\Src\drivers\Radio\radio.h(72): warning:  #1-D: last line of file ends without a newline
+  /************************ (C) COPYRIGHT feima *****END OF FILE****/
+..\Src\drivers\SIM7600\sim7600.h(73): warning:  #1-D: last line of file ends without a newline
+  	
+..\Src\lib\CRC\crc24.h(74): warning:  #1-D: last line of file ends without a newline
+  /************************ (C) COPYRIGHT feima *****END OF FILE****/
+..\Main\main.c(109): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  	STAT=SD_WriteBlock(test,0x00,512);
+..\Main\main.c(181): warning:  #550-D: variable "key_sttus"  was set but never used
+  	static unsigned char key_sttus=0;
+..\Main\main.c(247): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *"
+  					if(strstr(&esp_mesg.esp_date_buff[0],"rtkconfig") != NULL)
+..\Main\main.c(292): warning:  #1-D: last line of file ends without a newline
+  /************************ (C) COPYRIGHT feima *****END OF FILE****/
+..\Main\main.c: 20 warnings, 0 errors
 linking...
-Program Size: Code=49318 RO-data=2538 RW-data=16000 ZI-data=83824  
-".\Objects\FM-Base.axf" - 0 Error(s), 8 Warning(s).
+Program Size: Code=60598 RO-data=2622 RW-data=15832 ZI-data=85440  
+".\Objects\FM-Base.axf" - 0 Error(s), 20 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   .\RTE\_FM-Base-V0
   D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:11
+Build Time Elapsed:  00:00:12
 </pre>
 </body>
 </html>

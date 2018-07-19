@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_it.h 
   * @author  MCD Application Team
-  * @version V1.8.0
-  * @date    04-November-2016
+  * @version V1.4.0
+  * @date    04-August-2014
   * @brief   This file contains the headers of the interrupt handlers.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -36,9 +36,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 
-#ifdef USE_USB_OTG_FS
-#include "usbd_cdc_core.h"
-#endif
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
@@ -53,12 +50,6 @@ void SVC_Handler(void);
 void DebugMon_Handler(void);
 void PendSV_Handler(void);
 void SysTick_Handler(void);
-#ifdef USE_USB_OTG_FS
-void OTG_HS_IRQHandler(void);
-void OTG_HS_EP1_IN_IRQHandler(void);
-void OTG_HS_EP1_OUT_IRQHandler(void);
-void OTG_FS_IRQHandler(void);
-#endif
 
 #ifdef __cplusplus
 }

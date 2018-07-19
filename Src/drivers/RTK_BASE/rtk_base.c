@@ -54,8 +54,8 @@
  OS_EVENT *RTK_DATE_Semp;
  #endif 
 
-  static unsigned char RTK_TIME_START_FLAG=0;
- static unsigned char  RTK_TIME_OUT_FLAG=0;
+ static unsigned char RTK_TIME_START_FLAG=0;
+static unsigned char  RTK_TIME_OUT_FLAG=0;
 static unsigned char rtk_timecnt=0;
 static unsigned char rtk_wait_time=0;
 
@@ -63,6 +63,8 @@ static unsigned char rtk_wait_time=0;
  static char rtk_cmd_comander[RTK_CMD_CNT];
  static unsigned char RTK_CMD_FLAG=0;
   static unsigned char rtk_cmd_date_lenth=0;
+
+unsigned char rtcm_buf_cnt[RTCM_MESG_CNT];
 
  void RTK_BASE_Init(void)
  {
@@ -74,6 +76,7 @@ static unsigned char rtk_wait_time=0;
 		memset(&rtcm_msg[i].rtcm_flag,0,sizeof(RTCM_MESG));
 	 }
 	memset(&rtk_date_mesg.rtk_date_flag,0,sizeof(RTK_DATE_MESG));
+	memset(&rtcm_buf_cnt,0,RTCM_MESG_CNT);
  }
 
 
@@ -227,9 +230,10 @@ unsigned char OEM_RTK_BASE(void)
 	#endif
 	return 0;
 }
+
  void RTK_RTCM_IRTHandler(void)
  {
-		uint8_t res = 0;
+	 uint8_t res = 0;
 	 static uint8_t statu=0;
 	 static uint16_t LENTH_STR=0;
 	 static uint16_t msg_lenth=0;
@@ -355,6 +359,7 @@ unsigned char OEM_RTK_BASE(void)
 				{
 						rtcm_msg[ID_MES].rtcm_buff[LENTH_STR+2]=res;
 						rtcm_msg[ID_MES].rtcm_flag=TRUE;
+						rtcm_buf_cnt[ID_MES]=0x80;
 						statu=0;
 						OSSemPost(OEM_RTCM_Semp);
 				}
@@ -446,17 +451,62 @@ unsigned char OEM_RTK_BASE(void)
 	 }
 	 else if(USART_GetFlagStatus(RTK_DAT_UART, USART_FLAG_IDLE)!=RESET)
 	{
-			RTK_DAT_UART->SR;
-			RTK_DAT_UART->DR;
-			if(!RTK_CMD_FLAG)
-			{
-				rtk_date_mesg.rtk_date_flag=1;
-				OSSemPost(RTK_DATE_Semp);
-			}
+		RTK_DAT_UART->SR;
+		RTK_DAT_UART->DR;
+		if(!RTK_CMD_FLAG)
+		{
+			rtk_date_mesg.rtk_date_flag=1;
+			OSSemPost(RTK_DATE_Semp);
+		}
 	}
 	#ifdef SYSTEM_SUPPORT_OS
 	OSIntExit();
 	#endif 
+ }
+
+void rtcm_time_cnt(void)
+ {
+ 	if(rtcm_buf_cnt[MSG_ID1006] & 0x80)
+ 	{
+		rtcm_buf_cnt[MSG_ID1006]++;
+		if((rtcm_buf_cnt[MSG_ID1006] & 0x7f)>0x3c)//60s
+		{
+			rtcm_buf_cnt[MSG_ID1006]=0x80;
+		}
+	}
+	if(rtcm_buf_cnt[MSG_ID1033] & 0x80)
+ 	{
+		rtcm_buf_cnt[MSG_ID1033]++;
+		if((rtcm_buf_cnt[MSG_ID1033] & 0x7f)>0x3c)//60s
+		{
+			rtcm_buf_cnt[MSG_ID1033]=0x80;
+		}
+	}
+	if(rtcm_buf_cnt[MSG_ID1074] & 0x80)
+ 	{
+		rtcm_buf_cnt[MSG_ID1074]++;
+		if((rtcm_buf_cnt[MSG_ID1074] & 0x7f)>0x0A)//10s
+		{
+			rtcm_buf_cnt[MSG_ID1074]=0x80;
+		}
+	}
+	if(rtcm_buf_cnt[MSG_ID1084] & 0x80)
+ 	{
+		rtcm_buf_cnt[MSG_ID1084]++;
+		if((rtcm_buf_cnt[MSG_ID1084] & 0x7f)>0x0A)//10s
+		{
+			rtcm_buf_cnt[MSG_ID1084]=0x80;
+		}
+	}
+	if(rtcm_buf_cnt[MSG_ID1124] & 0x80)
+ 	{
+		rtcm_buf_cnt[MSG_ID1124]++;
+		if((rtcm_buf_cnt[MSG_ID1124] & 0x7f)>0x0A)//10s
+		{
+			rtcm_buf_cnt[MSG_ID1124]=0x80;
+		}
+	}
+	
  }
  /********************************************************************
 

@@ -1,2 +1,14 @@
----- TIMER_FEQ Matches (1 in 1 files) ----
-Main.c (e:\fm-base\main):			timer_tick(TIMER_FEQ);
+---- USB_OTG_Core Matches (13 in 3 files) ----
+FM-Base.build_log.htm (e:\fm-base\project\objects):.\Objects\FM-Base.axf: Error: L6218E: Undefined symbol USB_OTG_Core (referred from usb_bsp.o).
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):extern USB_OTG_CORE_HANDLE          USB_OTG_Core;
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):  if(HCD_IsDeviceConnected(&USB_OTG_Core))
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):  if(HCD_IsDeviceConnected(&USB_OTG_Core))
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):      status = USBH_MSC_Read10(&USB_OTG_Core, buff,sector,512 * count);
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):      USBH_MSC_HandleBOTXfer(&USB_OTG_Core ,&USB_Host);
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):      if(!HCD_IsDeviceConnected(&USB_OTG_Core))
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):  if(HCD_IsDeviceConnected(&USB_OTG_Core))
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):      status = USBH_MSC_Write10(&USB_OTG_Core,(BYTE*)buff,sector,512 * count);
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):      USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
+Usbh_msc_fatfs.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_device_library\class\msc\src):      if(!HCD_IsDeviceConnected(&USB_OTG_Core))
+Usb_bsp.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_app\msc\src):extern USB_OTG_CORE_HANDLE          USB_OTG_Core;
+Usb_bsp.c (e:\fm-base\stdperiph_driver_lib\stm32_usb_app\msc\src):	USBH_OTG_ISR_Handler(&USB_OTG_Core);

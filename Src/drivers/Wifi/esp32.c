@@ -303,6 +303,13 @@ unsigned char wifi_reg(void)
 	{
 		return 1;
 	}
+//	if(wifi_send_comd(CMD_CONN,"OK",2)!=0)
+//	{
+//		#ifdef Debug
+//		DEBUG("set con erro!\r\n");
+//		#endif
+//		return 1;
+//	}
 	if(wifi_send_comd(CMD_MODE,"OK",2)!=0)
 	{
 		#ifdef Debug
@@ -310,6 +317,7 @@ unsigned char wifi_reg(void)
 		#endif
 		return 1;
 	}
+	
 	if(wifi_send_comd(CMD_MUX,"OK",2)!=0)
 	{
 		#ifdef Debug

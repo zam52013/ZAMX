@@ -55,6 +55,7 @@
 	 #define CMD_SEVER "AT+CIPSERVER=1,8080\r\n"
 	 #define CMD_SAP "AT+CWSAP=\"FM-BASE\",\"12345678\",1,3\r\n"
 	 #define CMD_SEND "AT+CIPSEND=0,6\r\n" 
+	 #define CMD_CONN "AT+CIPSERVERMAXCONN=1\r\n"
 	 #define CMD_IP "AT+CIPAP=\"135.154.2.1\",\"135.154.2.1\",\"255.255.255.0\"\r\n"
 	 
 	 typedef struct

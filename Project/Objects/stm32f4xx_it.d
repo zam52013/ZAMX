@@ -37,13 +37,3 @@
 .\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma2d.h
 .\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fmc.h
 .\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sai.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\inc\usbd_cdc_core.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc\usbd_ioreq.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc\usbd_def.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\inc\usbd_conf.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\inc\usb_conf.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc\usbd_core.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_dcd.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_core.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_regs.h
-.\objects\stm32f4xx_it.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_defines.h

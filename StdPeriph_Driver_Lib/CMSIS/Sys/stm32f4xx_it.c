@@ -1,16 +1,16 @@
 /**
   ******************************************************************************
-  * @file    stm32fxxx_it.c
+  * @file    Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_it.c 
   * @author  MCD Application Team
-  * @version V1.2.0
-  * @date    09-November-2015
+  * @version V1.4.0
+  * @date    04-August-2014
   * @brief   Main Interrupt Service Routines.
-  *          This file provides all exceptions handler and peripherals interrupt
-  *          service routine.
+  *          This file provides template for all exceptions handler and 
+  *          peripherals interrupt service routine.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2015 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -25,32 +25,29 @@
   * limitations under the License.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
+ 
+
+/** @addtogroup Template_Project
+  * @{
+  */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-#ifdef USE_USB_OTG_FS
-extern USB_OTG_CORE_HANDLE           USB_OTG_dev;
-extern uint32_t USBD_OTG_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
+/* Private functions ---------------------------------------------------------*/
 
-#ifdef USB_OTG_HS_DEDICATED_EP1_ENABLED 
-extern uint32_t USBD_OTG_EP1IN_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
-extern uint32_t USBD_OTG_EP1OUT_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
-#endif
-
-#endif
 /******************************************************************************/
-/*             Cortex-M Processor Exceptions Handlers                         */
+/*            Cortex-M4 Processor Exceptions Handlers                         */
 /******************************************************************************/
 
 /**
-  * @brief   This function handles NMI exception.
+  * @brief  This function handles NMI exception.
   * @param  None
   * @retval None
   */
@@ -144,52 +141,14 @@ void DebugMon_Handler(void)
   */
 //void SysTick_Handler(void)
 //{
-// /* Information panel */
+// 
 //}
 
-#ifdef USE_USB_OTG_FS
-/**
-  * @brief  This function handles OTG_HS Handler.
-  * @param  None
-  * @retval None
-  */
-#ifdef USE_USB_OTG_HS  
-void OTG_HS_IRQHandler(void)
-#else
-void OTG_FS_IRQHandler(void)
-#endif
-{
-  USBD_OTG_ISR_Handler (&USB_OTG_dev);
-}
-
-#ifdef USB_OTG_HS_DEDICATED_EP1_ENABLED 
-/**
-  * @brief  This function handles EP1_IN Handler.
-  * @param  None
-  * @retval None
-  */
-void OTG_HS_EP1_IN_IRQHandler(void)
-{
-  USBD_OTG_EP1IN_ISR_Handler (&USB_OTG_dev);
-}
-
-/**
-  * @brief  This function handles EP1_OUT Handler.
-  * @param  None
-  * @retval None
-  */
-void OTG_HS_EP1_OUT_IRQHandler(void)
-{
-  USBD_OTG_EP1OUT_ISR_Handler (&USB_OTG_dev);
-}
-#endif
-
-#endif
 /******************************************************************************/
-/*                 STM32Fxxx Peripherals Interrupt Handlers                   */
+/*                 STM32F4xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
 /*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32fxxx.s).                                               */
+/*  file (startup_stm32f4xx.s).                                               */
 /******************************************************************************/
 
 /**
@@ -201,5 +160,9 @@ void OTG_HS_EP1_OUT_IRQHandler(void)
 {
 }*/
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/**
+  * @}
+  */ 
 
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

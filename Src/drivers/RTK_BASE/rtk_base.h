@@ -149,6 +149,7 @@ typedef struct
 	 void RTK_BASE_Init(void);
 	 unsigned char OEM_Init_output(void);
 	 unsigned char OEM_RTK_BASE(void);
+	 void rtcm_time_cnt(void);
 
 		#ifdef __cplusplus
 	}

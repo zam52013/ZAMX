@@ -1,8 +1,8 @@
 .\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\src\usbd_ioreq.c
 .\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc\usbd_ioreq.h
 .\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc\usbd_def.h
-.\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\inc\usbd_conf.h
-.\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\inc\usb_conf.h
+.\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\MSC\inc\usbd_conf.h
+.\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\MSC\inc\usb_conf.h
 .\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\CMSIS\Sys\stm32f4xx.h
 .\objects\usbd_ioreq.o: ..\StdPeriph_Driver_Lib\CMSIS\Include\core_cm4.h
 .\objects\usbd_ioreq.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h

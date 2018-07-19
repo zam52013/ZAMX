@@ -31,7 +31,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_ioreq.h"
-
+#if ! defined (USE_STM32446_EVAL) && ! defined (USE_STM32469I_EVAL)
+#include "lcd_log.h"
+#endif
 /** @addtogroup USBD_USER
   * @{
   */
@@ -80,8 +82,7 @@ extern  USBD_Usr_cb_TypeDef USR_HS_cb;
 /** @defgroup USBD_USR_Exported_Variables
   * @{
   */ 
-u8 getusbConnectState(void);
-	
+
 void     USBD_USR_Init(void);
 void     USBD_USR_DeviceReset (uint8_t speed);
 void     USBD_USR_DeviceConfigured (void);

@@ -46,10 +46,9 @@
 #endif
 
 #ifdef USE_USB_OTG_FS
-#include "usbd_cdc_core.h"
-#include "usbd_usr.h"
-#include "usb_conf.h"
-#include "usbd_desc.h"
+#include "usbh_core.h"
+#include "usbh_usr.h"
+#include "usbh_msc_core.h"
 #endif
 
 /****************perph***************************/
@@ -70,6 +69,8 @@
 #include "qxwz_rtcm.h"
 #include "socket.h"
 #include "prefs.h"
+#include "ff.h"  
+#include "stm32_eval_sdio_sd.h"
 /***********************************************/
 
 /****************UCOSII TASK*************************/

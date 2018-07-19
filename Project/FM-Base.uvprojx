@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F427X,USE_USB_OTG_FS,SYSTEM_SUPPORT_OS,__FPU_PRESENT=1,__FPU_USED =1</Define>
               <Undefine></Undefine>
-              <IncludePath>..\StdPeriph_Driver_Lib\CMSIS\Include;..\StdPeriph_Driver_Lib\CMSIS\Sys;..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc;..\Main;..\Board_Driver\gpio;..\Board_Driver\iic;..\Board_Driver\spi;..\Board_Driver\times;..\Board_Driver\uart;..\Board_Driver\usb;..\Board_Driver;..\StdPeriph_Driver_Lib\STM32_USB_APP\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\inc;..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\inc;..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc;..\Src\drivers\FRAM;..\Src\drivers\KEY;..\Src\drivers\MPU9250;..\Src\drivers\LED;..\Src\drivers\POW_CTR;..\Src\drivers\SOUNCE;..\Planforms\UCOSII\CONFIG;..\Planforms\UCOSII\CORE;..\Planforms\UCOSII\PORT;..\Src\lib\RTCM;..\Src\lib\Conversion;..\Src\lib;..\Src\lib\LowPassFilter2p;..\Src\drivers\RTK_BASE;..\Src\lib\CRC;..\Src\drivers\Radio;..\Src\drivers\Wifi;..\Src\drivers\SIM7600</IncludePath>
+              <IncludePath>..\StdPeriph_Driver_Lib\CMSIS\Include;..\StdPeriph_Driver_Lib\CMSIS\Sys;..\StdPeriph_Driver_Lib\STM32F4xx_StdPeriph_Driver\inc;..\Main;..\Board_Driver\gpio;..\Board_Driver\iic;..\Board_Driver\spi;..\Board_Driver\times;..\Board_Driver\uart;..\Board_Driver\usb;..\Board_Driver;..\StdPeriph_Driver_Lib\STM32_USB_APP\MSC\inc;..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc;..\Src\drivers\FRAM;..\Src\drivers\KEY;..\Src\drivers\MPU9250;..\Src\drivers\LED;..\Src\drivers\POW_CTR;..\Src\drivers\SOUNCE;..\Planforms\UCOSII\CONFIG;..\Planforms\UCOSII\CORE;..\Planforms\UCOSII\PORT;..\Src\lib\RTCM;..\Src\lib\Conversion;..\Src\lib;..\Src\lib\LowPassFilter2p;..\Src\drivers\RTK_BASE;..\Src\lib\CRC;..\Src\drivers\Radio;..\Src\drivers\Wifi;..\Src\drivers\SIM7600;..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Class\MSC\inc;..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Core\inc;..\Src\lib\fat_fs\src;..\Board_Driver\sdio</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -612,31 +612,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>StdPeriph_Driver_Lib\STM32_USB_Device_Library</GroupName>
-          <Files>
-            <File>
-              <FileName>usbd_cdc_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Class\cdc\src\usbd_cdc_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\src\usbd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_ioreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\src\usbd_ioreq.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_req.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_Device_Library\Core\src\usbd_req.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>StdPeriph_Driver_Lib\STM32_USB_OTG_Driver</GroupName>
           <Files>
             <File>
@@ -645,14 +620,14 @@
               <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\src\usb_core.c</FilePath>
             </File>
             <File>
-              <FileName>usb_dcd.c</FileName>
+              <FileName>usb_hcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\src\usb_dcd.c</FilePath>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\src\usb_hcd.c</FilePath>
             </File>
             <File>
-              <FileName>usb_dcd_int.c</FileName>
+              <FileName>usb_hcd_int.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\src\usb_dcd_int.c</FilePath>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\src\usb_hcd_int.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -662,22 +637,52 @@
             <File>
               <FileName>usb_bsp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_APP\src\usb_bsp.c</FilePath>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_APP\MSC\src\usb_bsp.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_cdc_vcp.c</FileName>
+              <FileName>usbh_usr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_APP\src\usbd_cdc_vcp.c</FilePath>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_APP\MSC\src\usbh_usr.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>StdPeriph_Driver_Lib\STM32_USB_HOST_Library</GroupName>
+          <Files>
+            <File>
+              <FileName>usbh_msc_bot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_bot.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_desc.c</FileName>
+              <FileName>usbh_msc_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_APP\src\usbd_desc.c</FilePath>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_usr.c</FileName>
+              <FileName>usbh_msc_scsi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_APP\src\usbd_usr.c</FilePath>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_scsi.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Core\src\usbh_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hcs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Core\src\usbh_hcs.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Core\src\usbh_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_stdreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\StdPeriph_Driver_Lib\STM32_USB_HOST_Library\Core\src\usbh_stdreq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -794,6 +799,11 @@
               <FileType>1</FileType>
               <FilePath>..\Board_Driver\gpio\gpio.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32_eval_sdio_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board_Driver\sdio\stm32_eval_sdio_sd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -883,6 +893,16 @@
               <FileName>crc24.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\lib\CRC\crc24.c</FilePath>
+            </File>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lib\fat_fs\src\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lib\fat_fs\src\ff.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -39,24 +39,26 @@
 #include <string.h>
 
 
-/** @defgroup APP_VCP_Private_Variables
-  * @{
-  */ 
-
-#ifdef USE_USB_OTG_FS
+/** @defgroup USBH_USR_MAIN_Private_Variables
+* @{
+*/
+#ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
+  #if defined ( __ICCARM__ ) /*!< IAR Compiler */
+    #pragma data_alignment=4   
+  #endif
+#endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
+__ALIGN_BEGIN USB_OTG_CORE_HANDLE      USB_OTG_Core __ALIGN_END;
 
 #ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
   #if defined ( __ICCARM__ ) /*!< IAR Compiler */
     #pragma data_alignment=4   
   #endif
 #endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
-   
-__ALIGN_BEGIN USB_OTG_CORE_HANDLE    USB_OTG_dev __ALIGN_END ;
-
-#endif 
+__ALIGN_BEGIN USBH_HOST                USB_Host __ALIGN_END;
 /**
-  * @}
-  */ 
+* @}
+*/ 
+
 
 /*******************task stk set*************************/
 OS_STK START_TASK_STK[START_STK_SIZE];			/*create task*/
@@ -69,6 +71,10 @@ OS_STK ESP_DATE_TASK_STK[ESP_DATE_STK_SIZE];				/*ESP DATE task*/
 OS_STK RTCM_TASK_STK[RTCM_STK_SIZE];						/*RTCM DATE task*/
 /*****************************************************/
 
+FATFS fs;
+char *test="$GPGGA,104115.00,2232.80090657,N,11354.02437690,E,1,25,0.6,12.5148,M,-3.8605,M,,*48";
+char STAT=0;
+/*************************MAIN********************************/
 int main(void)
 {
 	SystemInit(); 
@@ -76,18 +82,19 @@ int main(void)
 	cycleCounterInit();
 	SysTick_Config(SystemCoreClock / 1000);		//	1ms base time	
 	SOUNCE_Init();
+	f_mount(&fs,"0:",1); 	//挂载SD卡  
 /***************USB***********************/
 	#ifdef USE_USB_OTG_FS
 	
-	  USBD_Init(&USB_OTG_dev,
-	#ifdef USE_USB_OTG_HS 
-            USB_OTG_HS_CORE_ID,
-	#else            
+USBH_Init(&USB_OTG_Core, 
+#ifdef USE_USB_OTG_FS  
             USB_OTG_FS_CORE_ID,
-	#endif  
-            &USR_desc, 
-            &USBD_CDC_cb, 
-            &USR_cb);
+#else 
+            USB_OTG_HS_CORE_ID,
+#endif 
+            &USB_Host,
+            &USBH_MSC_cb, 
+            &USR_Callbacks);
 	
 	#endif  
 /********************************  */
@@ -95,6 +102,11 @@ int main(void)
 	fm25v_init();
 	MPU9250_Init();
 	Key_Init();
+	if(SD_Init()!=SD_OK)
+	{
+		LED_Out(STAT_GPIO1,ON_OFF);
+	}
+	//STAT=SD_WriteBlock(test,0x00,512);
 	//RTK_BASE_Init();
 	
 /***********OS setup****************/
@@ -138,26 +150,26 @@ void tickit_task(void *pdata)
 	while(1)
 	{
 		OSTimeDlyHMSM(0,0,1,0);
+		USBH_Process(&USB_OTG_Core, &USB_Host);
+		
 		wifi_tick_time();
 		RTK_tick_time();
 		
 		timer_tick(1);
-		restart_connect();	
+		restart_connect();
+		
+		rtcm_time_cnt();
 	}
 }
 
 uint8_t buff[18]="OK-ZAM-HELLO-FEIMA";
 void led_task(void *pdata)
 {
- 	static uint32_t dt;
 	static uint8_t buffa[18];
 	while(1)
 	{
 		OSTimeDlyHMSM(0,0,1,0);
 		LED_Out(POW_GPIO1,ON_OFF);
-		//wifi_soc_send(0,"ok send date",12);
-		//UART_SendString(ESP_PER,"AT\r\n");
-		//dt=micros();
 		//Get_Raw_Date();
 		//printf("get_time=%d\r\n",dt);
 		Fram_read(0x0000,18,&buffa[0]);
@@ -190,7 +202,8 @@ void oem_rtcm_task(void *pdata)
 				(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+1]<<8)+
 				(rtcm_msg[rtcm_cnt].rtcm_buff[(rtcm_msg[rtcm_cnt].lenth_h<<8)+rtcm_msg[rtcm_cnt].lenth_l+2])))
 				{
-					USARTx_SendBytes(RTK_RTCM,&rtcm_msg[rtcm_cnt].head,rtcm_msg[rtcm_cnt].lenth_h*256+rtcm_msg[rtcm_cnt].lenth_l+6);
+					//USARTx_SendBytes(RTK_RTCM,&rtcm_msg[rtcm_cnt].head,rtcm_msg[rtcm_cnt].lenth_h*256+rtcm_msg[rtcm_cnt].lenth_l+6);
+					wifi_soc_send(0,&rtcm_msg[rtcm_cnt].head,rtcm_msg[rtcm_cnt].lenth_h*256+rtcm_msg[rtcm_cnt].lenth_l+6);
 				}
 				rtcm_msg[rtcm_cnt].rtcm_flag=0;
 			}
@@ -250,13 +263,13 @@ void rtcm_task(void *pdata)
 	static int curretnTime = 0;
 	qxwz_soc_close(0);
 	qxwz_soc_close(1);
-  while(1) 
+  	while(1) 
 	{
-			OSTimeDlyHMSM(0,0,1,0);//wait 1s每隔一秒模拟宿主触发一次tick
+		OSTimeDlyHMSM(0,0,1,0);//wait 1s每隔一秒模拟宿主触发一次tick
 	   	curretnTime += 1000;
-			qxwz_tick_cnt++;
-			async_notify();
-    	qxwz_tick(curretnTime);
+		qxwz_tick_cnt++;
+		async_notify();
+    		qxwz_tick(curretnTime);
 		//get_qxwz_sdk_account_info();
   }
 }

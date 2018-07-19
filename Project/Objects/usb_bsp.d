@@ -1,7 +1,7 @@
-.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\src\usb_bsp.c
+.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\MSC\src\usb_bsp.c
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_bsp.h
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_OTG_Driver\inc\usb_core.h
-.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\inc\usb_conf.h
+.\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\STM32_USB_APP\MSC\inc\usb_conf.h
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\CMSIS\Sys\stm32f4xx.h
 .\objects\usb_bsp.o: ..\StdPeriph_Driver_Lib\CMSIS\Include\core_cm4.h
 .\objects\usb_bsp.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
